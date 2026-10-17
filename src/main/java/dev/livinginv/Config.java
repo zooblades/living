@@ -10,14 +10,14 @@ import java.nio.file.Path;
 public final class Config {
     /** File name inside config/livinginv/ ("" = disabled). */
     public String selected = "";
-    /** Black overlay strength, 0..100. */
-    public int dim = 30;
+    /** Opacity of the dark plates drawn under inventory slots, 0..100. */
+    public int slotOpacity = 35;
     /** Hard cap on animation length. Default is 10 minutes. Real limit is the memory budget below. */
     public int maxDurationSeconds = 600;
     /** RAM used for decoded frames. Long GIFs automatically get a lower resolution to fit. */
     public int memoryBudgetMb = 384;
-    /** Max size (longest side, px) a frame is stored at. */
-    public int maxResolution = 640;
+    /** Max size (longest side, px) a frame is stored at. The panel is small, 512 is plenty. */
+    public int maxResolution = 512;
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -39,7 +39,7 @@ public final class Config {
 
     private void sanitize() {
         if (selected == null) selected = "";
-        dim = Math.max(0, Math.min(100, dim));
+        slotOpacity = Math.max(0, Math.min(100, slotOpacity));
         maxDurationSeconds = Math.max(1, maxDurationSeconds);
         memoryBudgetMb = Math.max(32, memoryBudgetMb);
         maxResolution = Math.max(GifDecoder.MIN_SIDE, maxResolution);

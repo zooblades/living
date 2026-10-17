@@ -1,13 +1,13 @@
 # Living Inventory (Fabric, Minecraft 1.21.1, client-side)
 
-Animated GIF / image background behind the survival inventory.
+Replaces the survival inventory panel itself (the 176x166 window with slots and the player) with an animated GIF / image, cropped to fit. Dark plates under the slots keep items readable.
 
 - Files live in `.minecraft/config/livinginv/` (drag & drop into the picker screen also works)
 - Open inventory -> small **GIF** button in the top-left corner -> pick a file
 - `config/livinginv/config.json`:
   - `maxDurationSeconds` (default 600) - hard cap on animation length
   - `memoryBudgetMb` (default 384) - RAM for frames; long GIFs get lower resolution automatically to fit
-  - `maxResolution` (default 640), `dim` (0-100)
+  - `maxResolution` (default 512), `slotOpacity` (0-100)
 
 ## Build
 Needs JDK 21 and Gradle 8.8+:

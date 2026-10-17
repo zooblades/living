@@ -2,8 +2,10 @@ package dev.livinginv;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
@@ -74,16 +76,16 @@ public final class Background {
         shown = -1;
     }
 
-    public static void render(DrawContext ctx) {
+    /** Paints the animation in place of the vanilla inventory panel. Returns false if nothing is loaded yet. */
+    public static boolean renderPanel(DrawContext ctx, InventoryScreen screen, int x, int y, int w, int h) {
         GifDecoder.Result d = data;
         MinecraftClient mc = MinecraftClient.getInstance();
-        int sw = ctx.getScaledWindowWidth(), sh = ctx.getScaledWindowHeight();
 
         if (d == null) {
             if (progress >= 0) {
-                ctx.drawTextWithShadow(mc.textRenderer, "Living Inventory: loading " + progress + "%", 40, 8, 0xFFFFFF);
+                ctx.drawTextWithShadow(mc.textRenderer, "Living Inventory: loading " + progress + "%", x, y - 10, 0xFFFFFF);
             }
-            return;
+            return false; // vanilla panel is drawn meanwhile
         }
 
         if (texture == null || uploaded != d) {
@@ -95,7 +97,6 @@ public final class Background {
             mc.getTextureManager().registerTexture(TEX_ID, texture);
         }
 
-        // pick frame
         int count = d.frames().length;
         int idx = 0;
         if (count > 1) {
@@ -111,24 +112,30 @@ public final class Background {
         if (idx != shown) {
             NativeImage img = texture.getImage();
             int[] px = d.frames()[idx];
-            int w = d.width(), h = d.height();
-            for (int y = 0; y < h; y++)
-                for (int x = 0; x < w; x++)
-                    img.setColor(x, y, px[y * w + x]); // ABGR in 1.21.1
+            int iw = d.width(), ih = d.height();
+            for (int yy = 0; yy < ih; yy++)
+                for (int xx = 0; xx < iw; xx++)
+                    img.setColor(xx, yy, px[yy * iw + xx]); // ABGR in 1.21.1
             texture.upload();
             shown = idx;
         }
 
-        // "cover" fit: fill the window, crop the overflow
+        // "cover" fit into the panel rectangle, crop the overflow
         float imgAspect = (float) d.width() / d.height();
-        float scrAspect = (float) sw / sh;
+        float panelAspect = (float) w / h;
         int rw = d.width(), rh = d.height();
         float u = 0, v = 0;
-        if (scrAspect > imgAspect) { rh = Math.round(d.width() / scrAspect); v = (d.height() - rh) / 2f; }
-        else { rw = Math.round(d.height() * scrAspect); u = (d.width() - rw) / 2f; }
-        ctx.drawTexture(TEX_ID, 0, 0, sw, sh, u, v, rw, rh, d.width(), d.height());
+        if (panelAspect > imgAspect) { rh = Math.round(d.width() / panelAspect); v = (d.height() - rh) / 2f; }
+        else { rw = Math.round(d.height() * panelAspect); u = (d.width() - rw) / 2f; }
+        ctx.drawTexture(TEX_ID, x, y, w, h, u, v, rw, rh, d.width(), d.height());
 
-        int alpha = Math.round(LivingInvClient.config.dim * 2.55f);
-        if (alpha > 0) ctx.fill(0, 0, sw, sh, alpha << 24);
+        // translucent plates under the slots so items stay readable
+        int alpha = Math.round(LivingInvClient.config.slotOpacity * 2.55f);
+        if (alpha > 0) {
+            for (Slot s : screen.getScreenHandler().slots) {
+                ctx.fill(x + s.x - 1, y + s.y - 1, x + s.x + 17, y + s.y + 17, alpha << 24);
+            }
+        }
+        return true;
     }
 }

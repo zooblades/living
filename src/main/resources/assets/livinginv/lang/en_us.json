@@ -1,7 +1,7 @@
 {
   "livinginv.title": "Living Inventory",
   "livinginv.off": "Off",
-  "livinginv.dim": "Dim: %s%%",
+  "livinginv.slots": "Slot plates: %s%%",
   "livinginv.folder": "Open folder",
   "livinginv.done": "Done",
   "livinginv.drop": "Drop GIF / PNG / JPG / BMP files into this window or into the folder"

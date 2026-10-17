@@ -1,7 +1,7 @@
 {
   "livinginv.title": "Живой инвентарь",
   "livinginv.off": "Выкл",
-  "livinginv.dim": "Затемнение: %s%%",
+  "livinginv.slots": "Подложка слотов: %s%%",
   "livinginv.folder": "Открыть папку",
   "livinginv.done": "Готово",
   "livinginv.drop": "Перетащи GIF / PNG / JPG / BMP в это окно или в папку"

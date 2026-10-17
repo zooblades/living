@@ -71,8 +71,8 @@ public class PickerScreen extends Screen {
             Background.reload();
             clearAndInit();
         }).dimensions(x, ry, w / 2 - 2, 20).build());
-        addDrawableChild(ButtonWidget.builder(Text.translatable("livinginv.dim", cfg.dim), b -> {
-            cfg.dim = (cfg.dim + 10) % 110;
+        addDrawableChild(ButtonWidget.builder(Text.translatable("livinginv.slots", cfg.slotOpacity), b -> {
+            cfg.slotOpacity = (cfg.slotOpacity + 10) % 110;
             LivingInvClient.saveConfig();
             clearAndInit();
         }).dimensions(x + w / 2 + 2, ry, w / 2 - 2, 20).build());
