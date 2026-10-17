@@ -26,6 +26,8 @@ public final class Background {
     private static volatile GifDecoder.Result data;
     public static volatile String status = "";
     public static volatile int progress = -1; // -1 = idle
+    /** True while InventoryScreen.extractBackground runs (set by a mixin). */
+    public static boolean inInventoryBackground;
 
     // render-thread only
     private static GifDecoder.Result uploaded;

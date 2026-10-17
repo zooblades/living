@@ -29,7 +29,7 @@ public class LivingInvClient implements ClientModInitializer {
         ScreenEvents.AFTER_INIT.register((client, screen, w, h) -> {
             if (screen instanceof InventoryScreen) {
                 Screens.getWidgets(screen).add(Button.builder(Component.literal("GIF"),
-                        b -> client.setScreen(new PickerScreen(screen))).bounds(4, 4, 28, 16).build());
+                        b -> client.setScreenAndShow(new PickerScreen(screen))).bounds(4, 4, 28, 16).build());
             }
         });
     }

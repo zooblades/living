@@ -4,7 +4,6 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Util;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -79,7 +78,7 @@ public class PickerScreen extends Screen {
 
         ry += 24;
         addRenderableWidget(Button.builder(Component.translatable("livinginv.folder"),
-                b -> Util.getPlatform().openPath(LivingInvClient.dir))
+                b -> FolderOpener.open(LivingInvClient.dir))
                 .bounds(x, ry, w / 2 - 2, 20).build());
         addRenderableWidget(Button.builder(Component.translatable("livinginv.done"), b -> onClose())
                 .bounds(x + w / 2 + 2, ry, w / 2 - 2, 20).build());
@@ -108,6 +107,6 @@ public class PickerScreen extends Screen {
 
     @Override
     public void onClose() {
-        minecraft.setScreen(parent);
+        minecraft.setScreenAndShow(parent);
     }
 }

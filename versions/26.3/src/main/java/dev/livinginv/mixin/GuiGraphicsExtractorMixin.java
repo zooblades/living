@@ -2,9 +2,7 @@ package dev.livinginv.mixin;
 
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import dev.livinginv.Background;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -22,8 +20,7 @@ public abstract class GuiGraphicsExtractorMixin {
             at = @At("HEAD"), cancellable = true)
     private void livinginv$replacePanel(RenderPipeline pipeline, Identifier texture, int x, int y, float u, float v,
                                         int width, int height, int textureWidth, int textureHeight, CallbackInfo ci) {
-        if (width == 176 && height == 166 && LIVINGINV_PANEL.equals(texture)
-                && Minecraft.getInstance().screen instanceof InventoryScreen) {
+        if (Background.inInventoryBackground && width == 176 && height == 166 && LIVINGINV_PANEL.equals(texture)) {
             if (Background.renderPanel((GuiGraphicsExtractor) (Object) this, x, y, width, height)) {
                 ci.cancel();
             }
