@@ -3,7 +3,7 @@
   "id": "livinginv",
   "version": "${version}",
   "name": "Living Inventory",
-  "description": "Animated GIF / image background behind your inventory. Long GIFs supported.",
+  "description": "Replaces the survival inventory panel with an animated GIF or image. Long GIFs supported.",
   "authors": ["nazarbatrider"],
   "license": "MIT",
   "environment": "client",
