@@ -96,7 +96,7 @@ public class PickerScreen extends Screen {
     }
 
     @Override
-    public void onFilesDropped(List<Path> paths) {
+    public void filesDragged(List<Path> paths) {
         for (Path p : paths) {
             if (!supported(p)) continue;
             try {
