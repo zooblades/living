@@ -13,8 +13,8 @@
   "mixins": ["livinginv.mixins.json"],
   "depends": {
     "fabricloader": ">=0.16.0",
-    "minecraft": "~1.21.1",
-    "java": ">=21",
+    "minecraft": "${mc_depends}",
+    "java": ">=${java_version}",
     "fabric-api": "*"
   }
 }
