@@ -2,6 +2,7 @@ name: build
 
 on:
   push:
+    branches-ignore: [probe, probe-out]
   pull_request:
   workflow_dispatch:
 
