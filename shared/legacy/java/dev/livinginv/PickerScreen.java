@@ -86,7 +86,7 @@ public class PickerScreen extends Screen {
 
         ry += 24;
         addDrawableChild(Compat.button(x, ry, w / 2 - 2, 20, Compat.translatable("livinginv.folder"), () -> FolderOpener.open(LivingInvClient.dir)));
-        addDrawableChild(Compat.button(x + w / 2 + 2, ry, w / 2 - 2, 20, Compat.translatable("livinginv.done"), () -> close()));
+        addDrawableChild(Compat.button(x + w / 2 + 2, ry, w / 2 - 2, 20, Compat.translatable("livinginv.done"), () -> leave()));
     }
 
     private void centered(MatrixStack m, Text t, int y, int color) {
@@ -115,8 +115,12 @@ public class PickerScreen extends Screen {
         refresh();
     }
 
-    @Override
-    public void close() {
+    // Screen declares either onClose() or close() depending on the Minecraft version; the other is a spare method.
+    public void onClose() { leave(); }
+
+    public void close() { leave(); }
+
+    private void leave() {
         Compat.show(client, parent);
     }
 }
