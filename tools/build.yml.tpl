@@ -7,6 +7,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -50,3 +53,24 @@ jobs:
             !versions/${{ matrix.dir }}/build/libs/*-sources.jar
             versions/${{ matrix.dir }}/build.log
           if-no-files-found: warn
+
+  release:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: living-inventory-*
+          path: dist
+      - name: Publish rolling release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out
+          find dist -name '*.jar' -exec cp {} out/ \;
+          ls -la out
+          gh release delete latest --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create latest out/*.jar --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Latest build" --prerelease \
+            --notes "Automatic build of commit $GITHUB_SHA. One jar per Minecraft version range (see file names)."
