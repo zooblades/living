@@ -51,9 +51,9 @@ SETTINGS = """pluginManagement {
 }
 """
 
-def yarn(dir, mc, yarn_v, api, java, depends, era, checks, loader="0.16.14", shared="shared/yarn-dc"):
+def yarn(dir, mc, yarn_v, api, java, depends, era, checks, loader="0.16.14", shared="shared/yarn-dc", src=None):
     return dict(kind="yarn", dir=dir, mc=mc, yarn=yarn_v, api=api, java=java, depends=depends, loader=loader,
-                src=[shared, era], checks=checks)
+                src=src or [shared, era], checks=checks)
 
 def mojmap(dir, mc, api, depends, era, checks):
     return dict(kind="mojmap", dir=dir, mc=mc, yarn=None, api=api, java=25, depends=depends, loader="0.19.5",
@@ -71,6 +71,18 @@ GROUPS = [
          [("1.21.2", "1.21.2+build.1", "0.106.1+1.21.2"), ("1.21.3", "1.21.3+build.2", "0.114.1+1.21.3")]),
     yarn("1.20.5-1.21.1", "1.21.1", "1.21.1+build.3", "0.116.17+1.21.1", 21, ">=1.20.5 <=1.21.1", "eras/dc",
          [("1.20.6", "1.20.6+build.3", "0.100.8+1.20.6"), ("1.21", "1.21+build.9", "0.102.0+1.21")]),
+    yarn("1.19.4", "1.19.4", "1.19.4+build.2", "0.87.2+1.19.4", 17, ">=1.19.4 <=1.19.4", None, [],
+         src=["shared/legacy", "eras/old-d"]),
+    yarn("1.19.3", "1.19.3", "1.19.3+build.5", "0.76.1+1.19.3", 17, ">=1.19.3 <=1.19.3", None, [],
+         src=["shared/legacy", "shared/legacy-inst", "eras/old-c"]),
+    yarn("1.19-1.19.2", "1.19.2", "1.19.2+build.28", "0.77.0+1.19.2", 17, ">=1.19 <=1.19.2", None,
+         [("1.19", "1.19+build.4", "0.58.0+1.19"), ("1.19.1", "1.19.1+build.6", "0.58.5+1.19.1")],
+         src=["shared/legacy", "shared/legacy-inst", "eras/old-b"]),
+    yarn("1.17-1.18.2", "1.18.2", "1.18.2+build.4", "0.77.0+1.18.2", 16, ">=1.17 <=1.18.2", None,
+         [("1.17.1", "1.17.1+build.65", "0.46.1+1.17"), ("1.18.1", "1.18.1+build.22", "0.46.6+1.18")],
+         src=["shared/legacy", "shared/legacy-inst", "eras/old-a"]),
+    yarn("1.16.5", "1.16.5", "1.16.5+build.10", "0.42.0+1.16", 8, ">=1.16.5 <=1.16.5", None, [],
+         loader="0.14.25", src=["eras/old-e"]),
     yarn("1.20-1.20.4", "1.20.4", "1.20.4+build.3", "0.97.3+1.20.4", 17, ">=1.20 <=1.20.4", "eras/dc",
          [("1.20.1", "1.20.1+build.10", "0.92.12+1.20.1"), ("1.20.2", "1.20.2+build.4", "0.91.6+1.20.2")]),
 ]

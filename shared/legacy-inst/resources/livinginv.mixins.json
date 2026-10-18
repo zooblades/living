@@ -1,0 +1,7 @@
+{
+  "required": true,
+  "package": "dev.livinginv.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "client": ["DrawableHelperMixin"],
+  "injectors": { "defaultRequire": 1 }
+}
