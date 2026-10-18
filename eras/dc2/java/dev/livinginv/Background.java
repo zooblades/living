@@ -16,12 +16,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Loads the selected file on a worker thread and draws the inventory panel 1:1 like vanilla,
- * with only the grey panel fill replaced by the current animation frame (see PanelComposer).
+ * Loads the selected file on a worker thread and draws the inventory panel as
+ * "animation underneath, semi-transparent overlay on top" (see PanelComposer). The overlay is
+ * assets/livinginv/textures/gui/inventory_overlay.png and can be replaced by a resource pack.
  */
 public final class Background {
     private static final Identifier TEX_ID = Identifier.tryParse("livinginv:background");
-    private static final Identifier VANILLA_PANEL = Identifier.tryParse("minecraft:textures/gui/container/inventory.png");
+    private static final Identifier OVERLAY = Identifier.tryParse("livinginv:textures/gui/inventory_overlay.png");
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor(r -> {
         Thread t = new Thread(r, "livinginv-decoder");
         t.setDaemon(true);
@@ -34,7 +35,7 @@ public final class Background {
     public static volatile int progress = -1; // -1 = idle
 
     // render-thread only
-    private static int[] vanilla;          // vanilla panel pixels (ABGR), vw x vh
+    private static int[] vanilla;          // overlay pixels (ABGR), vw x vh
     private static int vw, vh;
     private static boolean vanillaValid;
     private static GifDecoder.Result uploaded;
@@ -47,7 +48,7 @@ public final class Background {
 
     private Background() { }
 
-    /** Call when the inventory opens: a resource pack may have changed the panel texture. */
+    /** Call when the inventory opens: a resource pack may have changed the overlay texture. */
     public static void invalidateVanilla() {
         vanillaValid = false;
     }
@@ -99,10 +100,10 @@ public final class Background {
 
     private static boolean loadVanilla(MinecraftClient mc) {
         try {
-            Optional<Resource> res = mc.getResourceManager().getResource(VANILLA_PANEL);
+            Optional<Resource> res = mc.getResourceManager().getResource(OVERLAY);
             if (!res.isPresent()) return false;
             try (InputStream in = res.get().getInputStream(); NativeImage img = NativeImage.read(in)) {
-                int k = Math.max(1, img.getWidth() / 256); // resource packs may ship HD panels
+                int k = Math.max(1, img.getWidth() / 256); // overlay is authored at 256*k px
                 vw = PanelComposer.PANEL_W * k;
                 vh = PanelComposer.PANEL_H * k;
                 int[] px = new int[vw * vh];
@@ -131,7 +132,7 @@ public final class Background {
         }
         if (!vanillaValid) {
             if (!loadVanilla(mc)) return false;
-            composer = null; // rebuild with the new vanilla pixels
+            composer = null; // rebuild with the new overlay pixels
         }
 
         // one output pixel per physical screen pixel keeps the pixel art sharp
