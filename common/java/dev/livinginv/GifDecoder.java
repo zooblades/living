@@ -24,8 +24,25 @@ import java.util.List;
 public final class GifDecoder {
     public static final int MIN_SIDE = 160;
 
-    public record Result(int width, int height, int[][] frames, long[] endsMs,
-                         boolean truncated, int sourceFrames, long totalMs) { }
+    public static final class Result {
+        private final int width, height, sourceFrames;
+        private final int[][] frames;
+        private final long[] endsMs;
+        private final boolean truncated;
+        private final long totalMs;
+
+        Result(int width, int height, int[][] frames, long[] endsMs, boolean truncated, int sourceFrames, long totalMs) {
+            this.width = width; this.height = height; this.frames = frames; this.endsMs = endsMs;
+            this.truncated = truncated; this.sourceFrames = sourceFrames; this.totalMs = totalMs;
+        }
+        public int width() { return width; }
+        public int height() { return height; }
+        public int[][] frames() { return frames; }
+        public long[] endsMs() { return endsMs; }
+        public boolean truncated() { return truncated; }
+        public int sourceFrames() { return sourceFrames; }
+        public long totalMs() { return totalMs; }
+    }
 
     public interface Progress { void update(int done, int total); }
 

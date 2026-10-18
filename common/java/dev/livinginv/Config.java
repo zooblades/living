@@ -24,7 +24,7 @@ public final class Config {
     public static Config load(Path file) {
         try {
             if (Files.isRegularFile(file)) {
-                Config c = GSON.fromJson(Files.readString(file), Config.class);
+                Config c = GSON.fromJson(new String(Files.readAllBytes(file), java.nio.charset.StandardCharsets.UTF_8), Config.class);
                 if (c != null) { c.sanitize(); return c; }
             }
         } catch (Exception ignored) { }
@@ -34,7 +34,7 @@ public final class Config {
     }
 
     public void save(Path file) {
-        try { Files.writeString(file, GSON.toJson(this)); } catch (IOException ignored) { }
+        try { Files.write(file, GSON.toJson(this).getBytes(java.nio.charset.StandardCharsets.UTF_8)); } catch (IOException ignored) { }
     }
 
     private void sanitize() {

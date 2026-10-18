@@ -1,0 +1,36 @@
+plugins {
+    id 'net.fabricmc.fabric-loom-remap' version '1.17-SNAPSHOT'
+}
+
+version = "${project.mod_version}+mc${project.mc_label}"
+group = 'dev.livinginv'
+base { archivesName = 'living-inventory' }
+
+project.src_dirs.split(',').each { sourceSets.main.java.srcDir(it.trim()) }
+project.res_dirs.split(',').each { sourceSets.main.resources.srcDir(it.trim()) }
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mc_depends", project.mc_depends
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version, "mc_depends": project.mc_depends, "java_version": project.java_version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = Integer.parseInt(project.java_version)
+    it.options.encoding = 'UTF-8'
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+}

@@ -6,8 +6,8 @@ version = "${project.mod_version}+mc${project.mc_label}"
 group = 'dev.livinginv'
 base { archivesName = 'living-inventory' }
 
-sourceSets.main.java.srcDir '../../common/java'
-sourceSets.main.resources.srcDir '../../common/resources'
+project.src_dirs.split(',').each { sourceSets.main.java.srcDir(it.trim()) }
+project.res_dirs.split(',').each { sourceSets.main.resources.srcDir(it.trim()) }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
