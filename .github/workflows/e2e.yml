@@ -17,6 +17,12 @@ jobs:
         with: { gradle-version: "9.5.1" }
       - name: Install virtual display + software OpenGL
         run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb libgl1-mesa-dri libglx-mesa0 libgl1 libopenal1 mesa-utils
+      - name: Where is client gametest API
+        run: |
+          mkdir -p out
+          curl -s https://maven.fabricmc.net/net/fabricmc/fabric-api/fabric-client-gametest-api-v1/maven-metadata.xml | grep -o '<version>[^<]*' | sed 's/<version>//' | tr '\n' ' ' > out/maven_versions.txt
+          curl -s https://maven.fabricmc.net/net/fabricmc/fabric-api/fabric-api/maven-metadata.xml | grep -o '<version>[^<]*1\.21\.1[^0-9.][^<]*\|<version>[^<]*+1\.21\.1<' | sed 's/<version>//' | tail -5 >> out/maven_versions.txt
+          cat out/maven_versions.txt
       - name: Run client game test
         working-directory: tests/e2e
         env:
@@ -32,6 +38,7 @@ jobs:
         run: |
           mkdir -p out
           cp e2e.log out/ || true
+          find ~/.gradle -iname '*gametest*' -name '*.jar' | head -20 > out/gametest_jars.txt
           find tests/e2e -path '*screenshots*' -name '*.png' -exec cp {} out/ \; || true
           find tests/e2e -name 'latest.log' -exec cp {} out/latest.log \; || true
           grep -E "error:|What went wrong|FAILED|Exception" -A2 e2e.log | head -60 | cut -c1-250 > out/summary.txt || true
