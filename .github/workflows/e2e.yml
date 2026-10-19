@@ -17,21 +17,17 @@ jobs:
         with: { gradle-version: "9.5.1" }
       - name: Install virtual display + software OpenGL
         run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb libgl1-mesa-dri libglx-mesa0 libgl1 libopenal1 mesa-utils
-      - name: Where is client gametest API
-        run: |
-          mkdir -p out
-          curl -s https://maven.fabricmc.net/net/fabricmc/fabric-api/fabric-client-gametest-api-v1/maven-metadata.xml | grep -o '<version>[^<]*' | sed 's/<version>//' | tr '\n' ' ' > out/maven_versions.txt
-          curl -s https://maven.fabricmc.net/net/fabricmc/fabric-api/fabric-api/maven-metadata.xml | grep -o '<version>[^<]*1\.21\.1[^0-9.][^<]*\|<version>[^<]*+1\.21\.1<' | sed 's/<version>//' | tail -5 >> out/maven_versions.txt
-          cat out/maven_versions.txt
-      - name: Run client game test
+      - name: Run the game under a virtual display
         working-directory: tests/e2e
         env:
           LIBGL_ALWAYS_SOFTWARE: "1"
           MESA_GL_VERSION_OVERRIDE: "4.5"
           MESA_GLSL_VERSION_OVERRIDE: "450"
         run: |
+          mkdir -p run
+          printf 'onboardAccessibility:false\ntutorialStep:none\nskipMultiplayerWarning:true\njoinedFirstServer:true\npauseOnLostFocus:false\nguiScale:2\nenableVsync:false\nmaxFps:30\nnarrator:0\n' > run/options.txt
           set +e
-          xvfb-run -a --server-args="-screen 0 1280x720x24" gradle runClientGameTest --no-daemon --stacktrace > ../../e2e.log 2>&1
+          timeout 1500 xvfb-run -a --server-args="-screen 0 1280x720x24" gradle runClient --no-daemon --stacktrace > ../../e2e.log 2>&1
           echo "exit=$?" >> ../../e2e.log
       - name: Collect output
         if: always()

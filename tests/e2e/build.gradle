@@ -9,16 +9,6 @@ base { archivesName = 'living-inventory' }
 project.src_dirs.split(',').each { sourceSets.main.java.srcDir(it.trim()) }
 project.res_dirs.split(',').each { sourceSets.main.resources.srcDir(it.trim()) }
 
-fabricApi {
-    configureTests {
-        createSourceSet = true
-        modId = "livinginv-e2e"
-        enableGameTests = false
-        enableClientGameTests = true
-        eula = true
-    }
-}
-
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -33,6 +23,8 @@ processResources {
         expand "version": project.version, "mc_depends": project.mc_depends, "java_version": project.java_version
     }
 }
+
+processResources.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
 tasks.withType(JavaCompile).configureEach {
     it.options.release = Integer.parseInt(project.java_version)

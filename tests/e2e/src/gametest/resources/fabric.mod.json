@@ -1,9 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "livinginv-e2e",
-  "version": "1.0.0",
-  "name": "Living Inventory e2e",
-  "environment": "client",
-  "entrypoints": { "fabric-client-gametest": ["dev.livinginv.e2e.PanelTest"] },
-  "depends": { "livinginv": "*" }
-}

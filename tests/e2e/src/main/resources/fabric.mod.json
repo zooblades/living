@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "livinginv",
+  "version": "${version}",
+  "name": "Living Inventory (e2e build)",
+  "environment": "client",
+  "entrypoints": { "client": ["dev.livinginv.LivingInvClient", "dev.livinginv.e2e.Driver"] },
+  "mixins": ["livinginv.mixins.json"],
+  "depends": { "fabricloader": ">=0.14.0", "minecraft": "${mc_depends}", "java": ">=${java_version}", "fabric-api": "*" }
+}
