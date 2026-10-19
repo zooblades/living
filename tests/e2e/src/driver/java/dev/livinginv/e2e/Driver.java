@@ -63,7 +63,7 @@ public class Driver implements ClientModInitializer {
         switch (phase) {
             case 0: // wait for title screen, open "create world"
                 if (s instanceof TitleScreen && inPhase() > 60) {
-                    CreateWorldScreen.show(mc, mc.currentScreen);
+                    CreateWorldScreen.create(mc, mc.currentScreen);
                     go(1);
                 }
                 break;
