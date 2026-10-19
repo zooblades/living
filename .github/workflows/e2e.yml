@@ -34,6 +34,7 @@ jobs:
         run: |
           mkdir -p out
           cp e2e.log out/ || true
+          J=$(find ~/.gradle/caches/fabric-loom/minecraftMaven -name '*.jar' | grep -E '/minecraft-merged/1.21.1-' | head -1); [ -n "$J" ] && javap -p -cp "$J" net.minecraft.client.gui.screen.world.CreateWorldScreen | grep -E 'static|CreateWorldScreen\(' > out/javap.txt || true
           find ~/.gradle -iname '*gametest*' -name '*.jar' | head -20 > out/gametest_jars.txt
           find tests/e2e -path '*screenshots*' -name '*.png' -exec cp {} out/ \; || true
           find tests/e2e -name 'latest.log' -exec cp {} out/latest.log \; || true
