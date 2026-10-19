@@ -34,11 +34,10 @@ jobs:
         run: |
           mkdir -p out
           cp e2e.log out/ || true
-          J=$(find ~/.gradle/caches/fabric-loom/minecraftMaven -name '*.jar' | grep -E '/minecraft-merged/1.21.1-' | head -1); [ -n "$J" ] && javap -p -cp "$J" net.minecraft.client.gui.screen.world.CreateWorldScreen | grep -E 'static|CreateWorldScreen\(' > out/javap.txt || true
-          find ~/.gradle -iname '*gametest*' -name '*.jar' | head -20 > out/gametest_jars.txt
-          find tests/e2e -path '*screenshots*' -name '*.png' -exec cp {} out/ \; || true
+          find tests/e2e -type d -name e2e-shots
+          find tests/e2e -type d -name e2e-shots -exec sh -c 'cp "$1"/*.png out/' _ {} \; || true
+          grep -a 'e2e\]' e2e.log > out/e2e_markers.txt || true
           find tests/e2e -name 'latest.log' -exec cp {} out/latest.log \; || true
-          grep -E "error:|What went wrong|FAILED|Exception" -A2 e2e.log | head -60 | cut -c1-250 > out/summary.txt || true
           ls -la out
           cd out
           git init -q -b e2e-out
