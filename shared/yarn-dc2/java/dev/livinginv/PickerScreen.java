@@ -102,7 +102,7 @@ public class PickerScreen extends Screen {
             LivingInvClient.saveConfig();
             PanelCore.invalidateOverlay();
         }
-        buildItems();
+        clearAndInit(); // rebuilds the list and refreshes the footer buttons
     }
 
     /** Test hooks. */
