@@ -20,5 +20,9 @@
   "livinginv.source.builtin": "Встроенный",
   "livinginv.source.user": "Твой файл",
   "livinginv.default": "По умолчанию",
-  "livinginv.opacity": "Непрозрачность оверлея"
+  "livinginv.opacity": "Непрозрачность оверлея",
+  "livinginv.rename.title": "Переименовать",
+  "livinginv.rename.hint": "Пусто = показывать имя файла",
+  "livinginv.ok": "ОК",
+  "livinginv.cancel": "Отмена"
 }

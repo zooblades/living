@@ -20,5 +20,9 @@
   "livinginv.source.builtin": "Built-in",
   "livinginv.source.user": "Your file",
   "livinginv.default": "Default",
-  "livinginv.opacity": "Overlay opacity"
+  "livinginv.opacity": "Overlay opacity",
+  "livinginv.rename.title": "Rename",
+  "livinginv.rename.hint": "Leave empty to use the file name",
+  "livinginv.ok": "OK",
+  "livinginv.cancel": "Cancel"
 }

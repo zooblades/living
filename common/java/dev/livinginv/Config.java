@@ -14,6 +14,8 @@ public final class Config {
     public String overlay = "";
     /** How strongly the overlay is drawn over the animation, 0..100 (100 = as designed, 0 = hidden). */
     public int overlayOpacity = 100;
+    /** Display names for animation files: file name -> name shown in the menu. The files themselves are not renamed. */
+    public java.util.Map<String, String> names = new java.util.HashMap<String, String>();
     /** Hard cap on animation length. Default is 10 minutes. Real limit is the memory budget below. */
     public int maxDurationSeconds = 600;
     /** RAM used for decoded frames. Long GIFs automatically get a lower resolution to fit. */
@@ -42,6 +44,7 @@ public final class Config {
     private void sanitize() {
         if (selected == null) selected = "";
         if (overlay == null) overlay = "";
+        if (names == null) names = new java.util.HashMap<String, String>();
         overlayOpacity = Math.max(0, Math.min(100, overlayOpacity));
         maxDurationSeconds = Math.max(1, maxDurationSeconds);
         memoryBudgetMb = Math.max(32, memoryBudgetMb);

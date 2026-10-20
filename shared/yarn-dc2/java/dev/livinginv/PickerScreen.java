@@ -78,7 +78,11 @@ public class PickerScreen extends Screen {
                     long kb = 0;
                     try { kb = Files.size(f) / 1024; } catch (IOException ignored) { }
                     String size = kb >= 1024 ? String.format(Locale.ROOT, "%.1f MB", kb / 1024.0) : kb + " KB";
-                    out.add(new Item(name, dot > 0 ? name.substring(0, dot) : name, ext + "  \u00b7  " + size, name.equals(cfg.selected)));
+                    String alias = cfg.names.get(name);
+                    boolean named = alias != null && !alias.isEmpty();
+                    String base = dot > 0 ? name.substring(0, dot) : name;
+                    String detail = (named ? name + "  \u00b7  " : "") + ext + "  \u00b7  " + size;
+                    out.add(new Item(name, named ? alias : base, detail, name.equals(cfg.selected)));
                 }
             } catch (IOException ignored) { }
         } else {
@@ -182,7 +186,12 @@ public class PickerScreen extends Screen {
         }
         if (mx >= listX && mx < listX + listW && my >= listY && my < listY + listH) {
             int idx = (int) ((my - listY + scroll) / ROW);
-            if (idx >= 0 && idx < items.size()) { select(items.get(idx)); return true; }
+            if (idx >= 0 && idx < items.size()) {
+                Item it = items.get(idx);
+                if (tab == 0 && mx >= listX + listW - 25) { client.setScreen(new RenameScreen(this, it.id)); return true; }
+                select(it);
+                return true;
+            }
         }
         return false;
     }
@@ -304,10 +313,14 @@ public class PickerScreen extends Screen {
             if (it.selected) ctx.fill(listX, y, listX + listW, y + ROW, ROW_SELECTED);
             else if (i == hover) ctx.fill(listX, y, listX + listW, y + ROW, ROW_HOVER);
             if (it.selected) ctx.fill(listX, y + 2, listX + 3, y + ROW - 2, ACCENT);
-            int tw = listW - 20;
+            int tw = listW - 20 - (tab == 0 ? 16 : 0);
             ctx.drawTextWithShadow(textRenderer, textRenderer.trimToWidth(it.label, tw), listX + 9, y + 4, it.selected ? ACCENT : TEXT);
             ctx.drawTextWithShadow(textRenderer, textRenderer.trimToWidth(it.detail, tw), listX + 9, y + 14, DIM);
             ctx.fill(listX + 6, y + ROW - 1, listX + listW - 6, y + ROW, 0x14FFFFFF);
+            if (tab == 0) {
+                boolean hotPencil = i == hover && mx >= listX + listW - 25;
+                drawPencil(ctx, listX + listW - 22, y + 7, hotPencil ? ACCENT : (i == hover ? TEXT : 0xFF5E6B78));
+            }
         }
         ctx.disableScissor();
 
@@ -336,8 +349,12 @@ public class PickerScreen extends Screen {
         int y = listY + 2;
         ctx.drawTextWithShadow(textRenderer, Text.translatable("livinginv.current"), rightX, y, DIM);
         y += 12;
-        String name = cfg.selected.isEmpty() ? Text.translatable("livinginv.none").getString() : cfg.selected;
+        String alias = cfg.names.get(cfg.selected);
+        boolean named = !cfg.selected.isEmpty() && alias != null && !alias.isEmpty();
+        String name = cfg.selected.isEmpty() ? Text.translatable("livinginv.none").getString() : (named ? alias : cfg.selected);
         ctx.drawTextWithShadow(textRenderer, textRenderer.trimToWidth(name, rightW), rightX, y, cfg.selected.isEmpty() ? DIM : TEXT);
+        y += named ? 11 : 0;
+        if (named) ctx.drawTextWithShadow(textRenderer, textRenderer.trimToWidth(cfg.selected, rightW), rightX, y, DIM);
         y += 18;
 
         if (PanelCore.progress >= 0) {
@@ -429,5 +446,12 @@ public class PickerScreen extends Screen {
         int thumbX = rightX + (rightW - 6) * op / 100;
         boolean hot = draggingSlider || overSlider(mx, my);
         ctx.fill(thumbX, ty - 3, thumbX + 6, ty + 9, hot ? 0xFFFFFFFF : 0xFFC9D6E0);
+    }
+
+    /** A tiny pixel pencil: diagonal body, eraser on top. */
+    private void drawPencil(DrawContext ctx, int x, int y, int color) {
+        for (int k = 0; k < 6; k++) ctx.fill(x + k, y + 7 - k, x + k + 2, y + 9 - k, color);
+        ctx.fill(x + 6, y + 1, x + 9, y + 4, 0xFFE07A7A);
+        ctx.fill(x, y + 8, x + 2, y + 10, 0xFFD6E2EC);
     }
 }
