@@ -1,6 +1,8 @@
 package dev.livinginv.e2e;
 
+import dev.livinginv.Overlays;
 import dev.livinginv.PanelCore;
+import dev.livinginv.PickerScreen;
 import dev.livinginv.LivingInvClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -93,9 +95,38 @@ public class Driver implements ClientModInitializer {
             case 4:
                 if (inPhase() == 120) {
                     shot(mc, "2-modded");
+                    makeDemoFiles();
+                    mc.setScreen(new PickerScreen(mc.currentScreen));
+                    go(5);
+                }
+                break;
+            case 5:
+                if (inPhase() == 15) {
+                    shot(mc, "3-menu-animations");
+                    ((PickerScreen) mc.currentScreen).debugTab(1);
+                    go(6);
+                }
+                break;
+            case 6:
+                if (inPhase() == 15) {
+                    shot(mc, "4-menu-overlays");
+                    ((PickerScreen) mc.currentScreen).debugSelect(1); // pick a different overlay
+                    go(7);
+                }
+                break;
+            case 7:
+                if (inPhase() == 15) {
+                    shot(mc, "5-menu-overlay-selected");
+                    mc.setScreen(new InventoryScreen(mc.player));
+                    go(8);
+                }
+                break;
+            case 8:
+                if (inPhase() == 60) {
+                    shot(mc, "6-inventory-switched-overlay");
                     System.out.println("[e2e] DONE");
                     mc.scheduleStop();
-                    go(5);
+                    go(9);
                 }
                 break;
             default:
@@ -132,6 +163,33 @@ public class Driver implements ClientModInitializer {
             img.writeTo(dir.resolve(name + ".png"));
         }
         System.out.println("[e2e] screenshot " + name);
+    }
+
+    /** Extra animations and two overlay variants derived from the default one, to fill the menu lists. */
+    private static void makeDemoFiles() throws Exception {
+        String[] names = {"ocean", "sunset", "northern lights", "city rain", "forest"};
+        float[] hues = {0.58f, 0.04f, 0.38f, 0.65f, 0.30f};
+        for (int n = 0; n < names.length; n++) {
+            BufferedImage img = new BufferedImage(320, 180, BufferedImage.TYPE_INT_RGB);
+            for (int y = 0; y < 180; y++)
+                for (int x = 0; x < 320; x++)
+                    img.setRGB(x, y, Color.HSBtoRGB(hues[n] + y / 900f, 0.7f, 0.35f + 0.6f * x / 320f));
+            ImageIO.write(img, "png", LivingInvClient.dir.resolve(names[n] + ".png").toFile());
+        }
+        BufferedImage base;
+        try (java.io.InputStream in = Overlays.open("")) { base = ImageIO.read(in); }
+        BufferedImage night = new BufferedImage(base.getWidth(), base.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage frost = new BufferedImage(base.getWidth(), base.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < base.getHeight(); y++)
+            for (int x = 0; x < base.getWidth(); x++) {
+                int c = base.getRGB(x, y), a = c >>> 24;
+                boolean plate = a > 80 && a < 120 && (c & 0xFFFFFF) == 0;
+                night.setRGB(x, y, plate ? (190 << 24) : c);
+                frost.setRGB(x, y, plate ? (70 << 24 | 0xFFFFFF) : c);
+            }
+        java.nio.file.Files.createDirectories(Overlays.userDir());
+        ImageIO.write(night, "png", Overlays.userDir().resolve("night.png").toFile());
+        ImageIO.write(frost, "png", Overlays.userDir().resolve("frost_glass.png").toFile());
     }
 
     private static void writeTestImage() throws Exception {
