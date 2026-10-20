@@ -1,7 +1,7 @@
 # Living Inventory (Fabric, client-side)
 
 Replaces the survival inventory panel itself (the 176x166 window with slots and the player) with an
-animated GIF / image, cropped to fit. Dark plates under the slots keep items readable.
+animated GIF / image, cropped to fit, under a semi-transparent overlay that keeps the vanilla layout.
 
 ## Download
 Every push to `main` publishes all jars to the **[latest release](../../releases/tag/latest)**.
@@ -29,7 +29,10 @@ Open the inventory -> small **GIF** button in the top-left corner -> pick a file
 `config/livinginv/config.json`:
 - `maxDurationSeconds` (default 600) - hard cap on animation length
 - `memoryBudgetMb` (default 384) - RAM for frames; long GIFs get a lower resolution automatically
-- `maxResolution` (default 512), `slotOpacity` (0-100)
+- `maxResolution` (default 512)
+
+The panel look comes from `assets/livinginv/textures/gui/inventory_overlay.png` (animation underneath, this
+semi-transparent overlay on top, rounded corners cut by its silhouette). A resource pack can replace it.
 
 ## Project layout
 - `common/` - version-independent code (GIF decoder, config)
