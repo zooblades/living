@@ -10,6 +10,8 @@ import java.nio.file.Path;
 public final class Config {
     /** File name inside config/livinginv/ ("" = disabled). */
     public String selected = "";
+    /** Overlay id: "" = built-in default, "file:name.png" = your file in config/livinginv/overlays, otherwise a resource id. */
+    public String overlay = "";
     /** Hard cap on animation length. Default is 10 minutes. Real limit is the memory budget below. */
     public int maxDurationSeconds = 600;
     /** RAM used for decoded frames. Long GIFs automatically get a lower resolution to fit. */
@@ -37,6 +39,7 @@ public final class Config {
 
     private void sanitize() {
         if (selected == null) selected = "";
+        if (overlay == null) overlay = "";
         maxDurationSeconds = Math.max(1, maxDurationSeconds);
         memoryBudgetMb = Math.max(32, memoryBudgetMb);
         maxResolution = Math.max(GifDecoder.MIN_SIDE, maxResolution);

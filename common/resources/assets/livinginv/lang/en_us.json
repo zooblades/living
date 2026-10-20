@@ -4,5 +4,20 @@
   "livinginv.slots": "Slot plates: %s%%",
   "livinginv.folder": "Open folder",
   "livinginv.done": "Done",
-  "livinginv.drop": "Drop GIF / PNG / JPG / BMP files into this window or into the folder"
+  "livinginv.drop": "Drop GIF / PNG / JPG / BMP files into this window or into the folder",
+  "livinginv.tab.animations": "Animations",
+  "livinginv.tab.overlays": "Overlays",
+  "livinginv.stop": "Stop animation",
+  "livinginv.reset_overlay": "Default overlay",
+  "livinginv.none": "None",
+  "livinginv.current": "Current",
+  "livinginv.drop.anim": "Drop GIF / PNG / JPG / BMP files here",
+  "livinginv.drop.overlay": "Drop overlay PNG files here",
+  "livinginv.empty.anim": "No animations yet",
+  "livinginv.empty.overlay": "No overlays found",
+  "livinginv.tip.anim": "Long GIFs are fine: the resolution is lowered automatically to fit the memory limit.",
+  "livinginv.tip.overlay": "An overlay is drawn over the animation. Transparent areas show the GIF.",
+  "livinginv.source.builtin": "Built-in",
+  "livinginv.source.user": "Your file",
+  "livinginv.default": "Default"
 }

@@ -4,5 +4,20 @@
   "livinginv.slots": "Подложка слотов: %s%%",
   "livinginv.folder": "Открыть папку",
   "livinginv.done": "Готово",
-  "livinginv.drop": "Перетащи GIF / PNG / JPG / BMP в это окно или в папку"
+  "livinginv.drop": "Перетащи GIF / PNG / JPG / BMP в это окно или в папку",
+  "livinginv.tab.animations": "Анимации",
+  "livinginv.tab.overlays": "Оверлеи",
+  "livinginv.stop": "Остановить",
+  "livinginv.reset_overlay": "Оверлей по умолчанию",
+  "livinginv.none": "Нет",
+  "livinginv.current": "Сейчас",
+  "livinginv.drop.anim": "Перетащи сюда GIF / PNG / JPG / BMP",
+  "livinginv.drop.overlay": "Перетащи сюда PNG-оверлеи",
+  "livinginv.empty.anim": "Анимаций пока нет",
+  "livinginv.empty.overlay": "Оверлеев не найдено",
+  "livinginv.tip.anim": "Длинные GIF подойдут: разрешение само снижается под лимит памяти.",
+  "livinginv.tip.overlay": "Оверлей рисуется поверх анимации. Прозрачные места показывают GIF.",
+  "livinginv.source.builtin": "Встроенный",
+  "livinginv.source.user": "Твой файл",
+  "livinginv.default": "По умолчанию"
 }
