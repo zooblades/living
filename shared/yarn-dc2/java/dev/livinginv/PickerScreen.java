@@ -1,5 +1,6 @@
 package dev.livinginv;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -371,7 +372,10 @@ public class PickerScreen extends Screen {
             }
         Preview p = preview(it);
         if (p.id != null && !p.failed) {
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
             ctx.drawTexture(p.id, ox, oy, dw, dh, 0f, 0f, p.regionW, p.regionH, p.texW, p.texH);
+            RenderSystem.disableBlend();
         }
         ctx.drawBorder(ox - 1, oy - 1, dw + 2, dh + 2, BORDER);
         String cap = textRenderer.trimToWidth(it.label, rightW);
