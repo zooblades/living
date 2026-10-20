@@ -20,6 +20,8 @@ public final class Background {
     private static final Identifier TEX_ID = Identifier.fromNamespaceAndPath("livinginv", "background");
     private static final Identifier OVERLAY = Identifier.fromNamespaceAndPath("livinginv", "textures/gui/inventory_overlay.png");
     private static DynamicTexture texture;
+    /** True while InventoryScreen.extractBackground runs (set by a mixin). */
+    public static boolean inInventoryBackground;
 
     private Background() { }
 

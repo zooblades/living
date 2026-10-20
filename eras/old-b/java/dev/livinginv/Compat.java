@@ -23,6 +23,6 @@ public final class Compat {
     public static void show(MinecraftClient client, Screen screen) { client.setScreen(screen); }
 
     public static InputStream openResource(MinecraftClient client, Identifier id) throws Exception {
-        return client.getResourceManager().getResource(id).getInputStream();
+        return client.getResourceManager().getResource(id).orElseThrow(() -> new IllegalStateException("overlay texture missing")).getInputStream();
     }
 }
