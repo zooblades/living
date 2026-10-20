@@ -52,7 +52,7 @@ public class PickerScreen extends Screen {
             addDrawableChild(ButtonWidget.builder(Text.literal(label), b -> {
                 cfg.selected = name;
                 LivingInvClient.saveConfig();
-                Background.reload();
+                PanelCore.reload();
                 clearAndInit();
             }).dimensions(x, y + i * 24, w, 20).build());
         }
@@ -67,21 +67,16 @@ public class PickerScreen extends Screen {
         addDrawableChild(ButtonWidget.builder(Text.translatable("livinginv.off"), b -> {
             cfg.selected = "";
             LivingInvClient.saveConfig();
-            Background.reload();
+            PanelCore.reload();
             clearAndInit();
         }).dimensions(x, ry, w / 2 - 2, 20).build());
-        addDrawableChild(ButtonWidget.builder(Text.translatable("livinginv.slots", cfg.slotOpacity), b -> {
-            cfg.slotOpacity = (cfg.slotOpacity + 10) % 110;
-            LivingInvClient.saveConfig();
-            clearAndInit();
-        }).dimensions(x + w / 2 + 2, ry, w / 2 - 2, 20).build());
-
-        ry += 24;
         addDrawableChild(ButtonWidget.builder(Text.translatable("livinginv.folder"),
                 b -> FolderOpener.open(LivingInvClient.dir))
-                .dimensions(x, ry, w / 2 - 2, 20).build());
-        addDrawableChild(ButtonWidget.builder(Text.translatable("livinginv.done"), b -> close())
                 .dimensions(x + w / 2 + 2, ry, w / 2 - 2, 20).build());
+
+        ry += 24;
+        addDrawableChild(ButtonWidget.builder(Text.translatable("livinginv.done"), b -> close())
+                .dimensions(x, ry, w, 20).build());
     }
 
     @Override
@@ -89,8 +84,8 @@ public class PickerScreen extends Screen {
         super.render(ctx, mouseX, mouseY, delta);
         ctx.drawCenteredTextWithShadow(textRenderer, title, width / 2, 14, 0xFFFFFFFF);
         ctx.drawCenteredTextWithShadow(textRenderer, Text.translatable("livinginv.drop"), width / 2, height - 22, 0xFFAAAAAA);
-        String st = Background.status;
-        if (Background.progress >= 0) st = "Loading " + Background.progress + "%";
+        String st = PanelCore.status;
+        if (PanelCore.progress >= 0) st = "Loading " + PanelCore.progress + "%";
         if (!st.isEmpty()) ctx.drawCenteredTextWithShadow(textRenderer, st, width / 2, height - 10, 0xFFFFDD55);
     }
 

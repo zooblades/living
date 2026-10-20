@@ -23,11 +23,12 @@ public class LivingInvClient implements ClientModInitializer {
         try { Files.createDirectories(dir); } catch (IOException ignored) { }
         configFile = dir.resolve("config.json");
         config = Config.load(configFile);
-        Background.reload();
+        PanelCore.reload();
 
         // Small "GIF" button in the corner of the survival inventory
         ScreenEvents.AFTER_INIT.register((MinecraftClient client, Screen screen, int w, int h) -> {
             if (screen instanceof InventoryScreen) {
+                PanelCore.invalidateOverlay();
                 Screens.getButtons(screen).add(Compat.button(4, 4, 28, 16, Compat.literal("GIF"),
                         () -> Compat.show(client, new PickerScreen(screen))));
             }

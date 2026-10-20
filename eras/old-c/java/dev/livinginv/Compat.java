@@ -1,6 +1,9 @@
 package dev.livinginv;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Identifier;
+
+import java.io.InputStream;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
@@ -18,4 +21,8 @@ public final class Compat {
     }
 
     public static void show(MinecraftClient client, Screen screen) { client.setScreen(screen); }
+
+    public static InputStream openResource(MinecraftClient client, Identifier id) throws Exception {
+        return client.getResourceManager().getResource(id).orElseThrow(() -> new IllegalStateException("overlay texture missing")).getInputStream();
+    }
 }

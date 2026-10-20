@@ -10,8 +10,6 @@ import java.nio.file.Path;
 public final class Config {
     /** File name inside config/livinginv/ ("" = disabled). */
     public String selected = "";
-    /** Opacity of the dark plates drawn under inventory slots, 0..100. */
-    public int slotOpacity = 35;
     /** Hard cap on animation length. Default is 10 minutes. Real limit is the memory budget below. */
     public int maxDurationSeconds = 600;
     /** RAM used for decoded frames. Long GIFs automatically get a lower resolution to fit. */
@@ -39,7 +37,6 @@ public final class Config {
 
     private void sanitize() {
         if (selected == null) selected = "";
-        slotOpacity = Math.max(0, Math.min(100, slotOpacity));
         maxDurationSeconds = Math.max(1, maxDurationSeconds);
         memoryBudgetMb = Math.max(32, memoryBudgetMb);
         maxResolution = Math.max(GifDecoder.MIN_SIDE, maxResolution);

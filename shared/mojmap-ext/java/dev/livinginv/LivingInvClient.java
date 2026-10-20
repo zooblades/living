@@ -23,11 +23,12 @@ public class LivingInvClient implements ClientModInitializer {
         try { Files.createDirectories(dir); } catch (IOException ignored) { }
         configFile = dir.resolve("config.json");
         config = Config.load(configFile);
-        Background.reload();
+        PanelCore.reload();
 
         // Small "GIF" button in the corner of the survival inventory
         ScreenEvents.AFTER_INIT.register((client, screen, w, h) -> {
             if (screen instanceof InventoryScreen) {
+                PanelCore.invalidateOverlay();
                 Screens.getWidgets(screen).add(Button.builder(Component.literal("GIF"),
                         b -> client.setScreenAndShow(new PickerScreen(screen))).bounds(4, 4, 28, 16).build());
             }

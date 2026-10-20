@@ -1,6 +1,6 @@
 package dev.livinginv.e2e;
 
-import dev.livinginv.Background;
+import dev.livinginv.PanelCore;
 import dev.livinginv.LivingInvClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -86,7 +86,7 @@ public class Driver implements ClientModInitializer {
                     shot(mc, "1-vanilla");
                     writeTestImage();
                     LivingInvClient.config.selected = "test.png";
-                    Background.reload();
+                    PanelCore.reload();
                     go(4);
                 }
                 break;

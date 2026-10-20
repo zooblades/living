@@ -52,7 +52,7 @@ public class PickerScreen extends Screen {
             addRenderableWidget(Button.builder(Component.literal(label), b -> {
                 cfg.selected = name;
                 LivingInvClient.saveConfig();
-                Background.reload();
+                PanelCore.reload();
                 rebuildWidgets();
             }).bounds(x, y + i * 24, w, 20).build());
         }
@@ -67,21 +67,15 @@ public class PickerScreen extends Screen {
         addRenderableWidget(Button.builder(Component.translatable("livinginv.off"), b -> {
             cfg.selected = "";
             LivingInvClient.saveConfig();
-            Background.reload();
+            PanelCore.reload();
             rebuildWidgets();
         }).bounds(x, ry, w / 2 - 2, 20).build());
-        addRenderableWidget(Button.builder(Component.translatable("livinginv.slots", cfg.slotOpacity), b -> {
-            cfg.slotOpacity = (cfg.slotOpacity + 10) % 110;
-            LivingInvClient.saveConfig();
-            rebuildWidgets();
-        }).bounds(x + w / 2 + 2, ry, w / 2 - 2, 20).build());
+        addRenderableWidget(Button.builder(Component.translatable("livinginv.folder"),
+                b -> FolderOpener.open(LivingInvClient.dir)).bounds(x + w / 2 + 2, ry, w / 2 - 2, 20).build());
 
         ry += 24;
-        addRenderableWidget(Button.builder(Component.translatable("livinginv.folder"),
-                b -> FolderOpener.open(LivingInvClient.dir))
-                .bounds(x, ry, w / 2 - 2, 20).build());
         addRenderableWidget(Button.builder(Component.translatable("livinginv.done"), b -> onClose())
-                .bounds(x + w / 2 + 2, ry, w / 2 - 2, 20).build());
+                .bounds(x, ry, w, 20).build());
     }
 
     @Override
@@ -89,8 +83,8 @@ public class PickerScreen extends Screen {
         super.extractRenderState(g, mouseX, mouseY, delta);
         g.centeredText(font, title, width / 2, 14, 0xFFFFFFFF);
         g.centeredText(font, Component.translatable("livinginv.drop"), width / 2, height - 22, 0xFFAAAAAA);
-        String st = Background.status;
-        if (Background.progress >= 0) st = "Loading " + Background.progress + "%";
+        String st = PanelCore.status;
+        if (PanelCore.progress >= 0) st = "Loading " + PanelCore.progress + "%";
         if (!st.isEmpty()) g.centeredText(font, st, width / 2, height - 10, 0xFFFFDD55);
     }
 
