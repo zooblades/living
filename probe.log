@@ -1,0 +1,153 @@
+MC_JAR=/home/runner/.gradle/caches/fabric-loom/26.2/minecraft-merged.jar
+== Screen
+  protected final net.minecraft.client.Minecraft minecraft;
+  public int width;
+  public int height;
+  private final java.util.List<net.minecraft.client.gui.components.Renderable> renderables;
+  protected final net.minecraft.client.gui.Font font;
+  public final void extractRenderStateWithTooltipAndSubtitles(net.minecraft.client.gui.GuiGraphicsExtractor, int, int, float);
+  public void extractRenderState(net.minecraft.client.gui.GuiGraphicsExtractor, int, int, float);
+  public boolean keyPressed(net.minecraft.client.input.KeyEvent);
+  public void onClose();
+  public final void init(int, int);
+  protected void rebuildWidgets();
+  protected void init();
+  public void removed();
+  public void extractBackground(net.minecraft.client.gui.GuiGraphicsExtractor, int, int, float);
+  protected void extractBlurredBackground(net.minecraft.client.gui.GuiGraphicsExtractor);
+  protected void extractPanorama(net.minecraft.client.gui.GuiGraphicsExtractor, float);
+  protected void extractMenuBackground(net.minecraft.client.gui.GuiGraphicsExtractor);
+  protected void extractMenuBackground(net.minecraft.client.gui.GuiGraphicsExtractor, int, int, int, int);
+  public static void extractMenuBackgroundTexture(net.minecraft.client.gui.GuiGraphicsExtractor, net.minecraft.resources.Identifier, int, int, float, float, int, int);
+  public void extractTransparentBackground(net.minecraft.client.gui.GuiGraphicsExtractor);
+  public void onFilesDrop(java.util.List<java.nio.file.Path>);
+== input classes
+net/minecraft/client/input/CharacterEvent.class
+net/minecraft/client/input/InputQuirks.class
+net/minecraft/client/input/InputWithModifiers.class
+net/minecraft/client/input/KeyEvent.class
+net/minecraft/client/input/MouseButtonEvent.class
+net/minecraft/client/input/MouseButtonInfo.class
+net/minecraft/client/input/PreeditEvent.class
+-- KeyEvent
+Compiled from "KeyEvent.java"
+public final class net.minecraft.client.input.KeyEvent extends java.lang.Record implements net.minecraft.client.input.InputWithModifiers {
+  private final int key;
+  private final int scancode;
+  private final int modifiers;
+  public net.minecraft.client.input.KeyEvent(int, int, int);
+  public int input();
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public int key();
+  public int scancode();
+  public int modifiers();
+}
+-- CharacterEvent
+Compiled from "CharacterEvent.java"
+public final class net.minecraft.client.input.CharacterEvent extends java.lang.Record {
+  private final int codepoint;
+  public net.minecraft.client.input.CharacterEvent(int);
+  public java.lang.String codepointAsString();
+  public boolean isAllowedChatCharacter();
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public int codepoint();
+}
+-- MouseButtonEvent
+Compiled from "MouseButtonEvent.java"
+public final class net.minecraft.client.input.MouseButtonEvent extends java.lang.Record implements net.minecraft.client.input.InputWithModifiers {
+  private final double x;
+  private final double y;
+  private final net.minecraft.client.input.MouseButtonInfo buttonInfo;
+  public net.minecraft.client.input.MouseButtonEvent(double, double, net.minecraft.client.input.MouseButtonInfo);
+  public int input();
+  public int button();
+  public int modifiers();
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public double x();
+  public double y();
+  public net.minecraft.client.input.MouseButtonInfo buttonInfo();
+}
+-- MouseButtonInfo
+Compiled from "MouseButtonInfo.java"
+public final class net.minecraft.client.input.MouseButtonInfo extends java.lang.Record implements net.minecraft.client.input.InputWithModifiers {
+  private final int button;
+  private final int modifiers;
+  public net.minecraft.client.input.MouseButtonInfo(int, int);
+  public int input();
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public int button();
+  public int modifiers();
+}
+== GuiGraphicsExtractor
+  public void fill(int, int, int, int, int);
+  public void fill(com.mojang.blaze3d.pipeline.RenderPipeline, int, int, int, int, int);
+  public void fill(com.mojang.blaze3d.pipeline.RenderPipeline, net.minecraft.client.gui.render.TextureSetup, int, int, int, int);
+  public void outline(int, int, int, int, int);
+  public void text(net.minecraft.client.gui.Font, java.lang.String, int, int, int);
+  public void text(net.minecraft.client.gui.Font, java.lang.String, int, int, int, boolean);
+  public void text(net.minecraft.client.gui.Font, net.minecraft.util.FormattedCharSequence, int, int, int);
+  public void text(net.minecraft.client.gui.Font, net.minecraft.util.FormattedCharSequence, int, int, int, boolean);
+  public void text(net.minecraft.client.gui.Font, net.minecraft.network.chat.Component, int, int, int);
+  public void text(net.minecraft.client.gui.Font, net.minecraft.network.chat.Component, int, int, int, boolean);
+  public void centeredText(net.minecraft.client.gui.Font, java.lang.String, int, int, int);
+  public void centeredText(net.minecraft.client.gui.Font, net.minecraft.network.chat.Component, int, int, int);
+  public void centeredText(net.minecraft.client.gui.Font, net.minecraft.util.FormattedCharSequence, int, int, int);
+  public void textWithBackdrop(net.minecraft.client.gui.Font, net.minecraft.network.chat.Component, int, int, int, int);
+  public void blit(com.mojang.blaze3d.pipeline.RenderPipeline, net.minecraft.resources.Identifier, int, int, float, float, int, int, int, int, int);
+  public void blit(com.mojang.blaze3d.pipeline.RenderPipeline, net.minecraft.resources.Identifier, int, int, float, float, int, int, int, int);
+  public void blit(com.mojang.blaze3d.pipeline.RenderPipeline, net.minecraft.resources.Identifier, int, int, float, float, int, int, int, int, int, int);
+  public void blit(com.mojang.blaze3d.pipeline.RenderPipeline, net.minecraft.resources.Identifier, int, int, float, float, int, int, int, int, int, int, int);
+  public void blit(net.minecraft.resources.Identifier, int, int, int, int, float, float, float, float);
+  public void blit(com.mojang.blaze3d.textures.GpuTextureView, com.mojang.blaze3d.textures.GpuSampler, int, int, int, int, float, float, float, float);
+== Font
+  public int width(java.lang.String);
+  public int width(net.minecraft.network.chat.FormattedText);
+  public int width(net.minecraft.util.FormattedCharSequence);
+== Minecraft kb
+  public final net.minecraft.client.KeyboardHandler keyboardHandler;
+== KeyboardHandler
+  private final com.mojang.blaze3d.platform.ClipboardManager clipboardManager;
+  public java.lang.String getClipboard();
+  public void setClipboard(java.lang.String);
+  private void lambda$getClipboard$0(int, long);
+== AbstractWidget/Button
+  protected boolean isHovered;
+  public boolean active;
+  public int getHeight();
+  public final void extractRenderState(net.minecraft.client.gui.GuiGraphicsExtractor, int, int, float);
+  protected void extractTooltipForNextRenderPass(net.minecraft.client.gui.GuiGraphicsExtractor, int, int);
+  protected abstract void extractWidgetRenderState(net.minecraft.client.gui.GuiGraphicsExtractor, int, int, float);
+  protected void extractScrollingStringOverContents(net.minecraft.client.gui.ActiveTextCollector, net.minecraft.network.chat.Component, int);
+  public int getWidth();
+  public boolean isFocused();
+  public boolean isHovered();
+  public boolean isHoveredOrFocused();
+  public int getX();
+  public int getY();
+  public net.minecraft.client.gui.components.AbstractButton(int, int, int, int, net.minecraft.network.chat.Component);
+  protected final void extractWidgetRenderState(net.minecraft.client.gui.GuiGraphicsExtractor, int, int, float);
+  protected abstract void extractContents(net.minecraft.client.gui.GuiGraphicsExtractor, int, int, float);
+  protected void extractDefaultLabel(net.minecraft.client.gui.ActiveTextCollector);
+  protected final void extractDefaultSprite(net.minecraft.client.gui.GuiGraphicsExtractor);
+  protected static final net.minecraft.client.gui.components.Button$CreateNarration DEFAULT_NARRATION;
+  protected final net.minecraft.client.gui.components.Button$OnPress onPress;
+  public static net.minecraft.client.gui.components.Button$Builder builder(net.minecraft.network.chat.Component, net.minecraft.client.gui.components.Button$OnPress);
+  protected net.minecraft.client.gui.components.Button(int, int, int, int, net.minecraft.network.chat.Component, net.minecraft.client.gui.components.Button$OnPress, net.minecraft.client.gui.components.Button$CreateNarration);
+== ResourceManager
+  public abstract java.util.List<net.minecraft.server.packs.resources.Resource> getResourceStack(net.minecraft.resources.Identifier);
+  public abstract java.util.Map<net.minecraft.resources.Identifier, net.minecraft.server.packs.resources.Resource> listResources(java.lang.String, java.util.function.Predicate<net.minecraft.resources.Identifier>);
+== Resource
+  public java.io.InputStream open() throws java.io.IOException;
+  public java.io.BufferedReader openAsReader() throws java.io.IOException;
+== window scale
+  public int getGuiScaledWidth();
+  public int getGuiScaledHeight();
+  public int getGuiScale();
