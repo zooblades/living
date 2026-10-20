@@ -53,6 +53,7 @@ public final class PanelCore {
     private static int composerScale;
     private static int[] buffer;
     private static int shown = -1;
+    private static int composedOpacity = -1;
     private static long startMs;
     private static boolean textureReset;
     private static final View VIEW = new View();
@@ -151,9 +152,11 @@ public final class PanelCore {
             }
             idx = lo;
         }
+        int opacity = LivingInvClient.config.overlayOpacity;
+        if (opacity != composedOpacity) { composedOpacity = opacity; shown = -1; }
         VIEW.upload = idx != shown;
         if (VIEW.upload) {
-            composer.compose(d.frames()[idx], buffer);
+            composer.compose(d.frames()[idx], buffer, opacity);
             shown = idx;
         }
         VIEW.width = composer.outW;

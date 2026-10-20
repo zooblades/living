@@ -19,5 +19,6 @@
   "livinginv.tip.overlay": "Оверлей рисуется поверх анимации. Прозрачные места показывают GIF.",
   "livinginv.source.builtin": "Встроенный",
   "livinginv.source.user": "Твой файл",
-  "livinginv.default": "По умолчанию"
+  "livinginv.default": "По умолчанию",
+  "livinginv.opacity": "Непрозрачность оверлея"
 }

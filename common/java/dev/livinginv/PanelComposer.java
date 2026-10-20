@@ -47,8 +47,7 @@ public final class PanelComposer {
                 int c = overlay[oi], a = c >>> 24;
                 if (outside[oi]) { type[i] = OUTSIDE; continue; }
                 ov[i] = c;
-                if (a == 255) { type[i] = SOLID; continue; }
-                type[i] = a == 0 ? CLEAR : BLEND;
+                type[i] = a == 255 ? SOLID : (a == 0 ? CLEAR : BLEND);
                 int sx = Math.min(frameW - 1, (int) (cu + (x + 0.5f) * cw / outW));
                 int sy = Math.min(frameH - 1, (int) (cv + (y + 0.5f) * ch / outH));
                 map[i] = sy * frameW + sx;
@@ -85,21 +84,37 @@ public final class PanelComposer {
         return tail;
     }
 
-    /** Writes the composed panel for the given animation frame into out (length outW*outH). */
+    /** Writes the composed panel (overlay at full strength) into out (length outW*outH). */
     public void compose(int[] frame, int[] out) {
+        compose(frame, out, 100);
+    }
+
+    /**
+     * Writes the composed panel for the given animation frame into out (length outW*outH).
+     * @param opacity overlay strength 0..100; the overlay alpha is multiplied by it
+     */
+    public void compose(int[] frame, int[] out, int opacity) {
         for (int i = 0; i < out.length; i++) {
             switch (type[i]) {
                 case OUTSIDE: out[i] = 0; break;
                 case CLEAR: out[i] = frame[map[i]] | 0xFF000000; break;
-                case SOLID: out[i] = ov[i]; break;
+                case SOLID:
+                    out[i] = opacity >= 100 ? ov[i] : mix(frame[map[i]], ov[i], 255 * opacity / 100);
+                    break;
                 default: {
-                    int g = frame[map[i]], o = ov[i], a = o >>> 24, inv = 255 - a;
-                    int r = ((o & 255) * a + (g & 255) * inv + 127) / 255;
-                    int gr = (((o >> 8) & 255) * a + ((g >> 8) & 255) * inv + 127) / 255;
-                    int b = (((o >> 16) & 255) * a + ((g >> 16) & 255) * inv + 127) / 255;
-                    out[i] = 0xFF000000 | b << 16 | gr << 8 | r;
+                    int a = opacity >= 100 ? ov[i] >>> 24 : (ov[i] >>> 24) * opacity / 100;
+                    out[i] = mix(frame[map[i]], ov[i], a);
                 }
             }
         }
+    }
+
+    /** overlay colour o with alpha a (0..255) over the opaque frame colour g; result is opaque. */
+    private static int mix(int g, int o, int a) {
+        int inv = 255 - a;
+        int r = ((o & 255) * a + (g & 255) * inv + 127) / 255;
+        int gr = (((o >> 8) & 255) * a + ((g >> 8) & 255) * inv + 127) / 255;
+        int b = (((o >> 16) & 255) * a + ((g >> 16) & 255) * inv + 127) / 255;
+        return 0xFF000000 | b << 16 | gr << 8 | r;
     }
 }

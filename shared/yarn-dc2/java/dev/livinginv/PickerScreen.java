@@ -3,7 +3,6 @@ package dev.livinginv;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.text.OrderedText;
@@ -52,6 +51,7 @@ public class PickerScreen extends Screen {
     private double scroll;
     private final Map<String, Preview> previews = new HashMap<>();
     private int px, py, pw, ph, listX, listY, listW, listH, rightX, rightW;
+    private boolean draggingSlider;
 
     public PickerScreen(Screen parent) {
         super(Text.translatable("livinginv.title"));
@@ -139,18 +139,27 @@ public class PickerScreen extends Screen {
 
         final Config cfg = LivingInvClient.config;
         int by = py + ph - 28, bw = (pw - 20 - 8) / 3;
-        addDrawableChild(ButtonWidget.builder(Text.translatable("livinginv.folder"),
-                b -> FolderOpener.open(tab == 0 ? LivingInvClient.dir : Overlays.userDir()))
-                .dimensions(px + 10, by, bw, 20).build());
-        ButtonWidget mid = addDrawableChild(ButtonWidget.builder(
+        addDrawableChild(new FlatButton(px + 10, by, bw, 20, Text.translatable("livinginv.folder"),
+                b -> FolderOpener.open(tab == 0 ? LivingInvClient.dir : Overlays.userDir()), false));
+        FlatButton mid = addDrawableChild(new FlatButton(px + 10 + bw + 4, by, bw, 20,
                 Text.translatable(tab == 0 ? "livinginv.stop" : "livinginv.reset_overlay"), b -> {
                     if (tab == 0) { cfg.selected = ""; LivingInvClient.saveConfig(); PanelCore.reload(); }
                     else { cfg.overlay = ""; LivingInvClient.saveConfig(); PanelCore.invalidateOverlay(); }
                     clearAndInit();
-                }).dimensions(px + 10 + bw + 4, by, bw, 20).build());
+                }, false));
         mid.active = tab == 0 ? !cfg.selected.isEmpty() : !cfg.overlay.isEmpty();
-        addDrawableChild(ButtonWidget.builder(Text.translatable("livinginv.done"), b -> close())
-                .dimensions(px + 10 + (bw + 4) * 2, by, bw, 20).build());
+        addDrawableChild(new FlatButton(px + 10 + (bw + 4) * 2, by, bw, 20, Text.translatable("livinginv.done"), b -> close(), true));
+    }
+
+    private int sliderY() { return listY + listH - 24; }
+
+    private boolean overSlider(double mx, double my) {
+        return tab == 1 && mx >= rightX && mx <= rightX + rightW && my >= sliderY() + 8 && my <= sliderY() + 24;
+    }
+
+    private void setOpacityFromMouse(double mx) {
+        int v = (int) Math.round((mx - rightX - 3) / (double) (rightW - 6) * 100);
+        LivingInvClient.config.overlayOpacity = Math.max(0, Math.min(100, v));
     }
 
     private int contentHeight() { return items.size() * ROW; }
@@ -166,6 +175,7 @@ public class PickerScreen extends Screen {
     public boolean mouseClicked(double mx, double my, int button) {
         if (super.mouseClicked(mx, my, button)) return true;
         if (button != 0) return false;
+        if (overSlider(mx, my)) { draggingSlider = true; setOpacityFromMouse(mx); return true; }
         for (int t = 0; t < 2; t++) {
             int tx = px + 10 + t * 96;
             if (mx >= tx && mx < tx + 92 && my >= py + 26 && my < py + 42) { switchTab(t); return true; }
@@ -178,7 +188,25 @@ public class PickerScreen extends Screen {
     }
 
     @Override
+    public boolean mouseDragged(double mx, double my, int button, double dx, double dy) {
+        if (draggingSlider) { setOpacityFromMouse(mx); return true; }
+        return super.mouseDragged(mx, my, button, dx, dy);
+    }
+
+    @Override
+    public boolean mouseReleased(double mx, double my, int button) {
+        if (draggingSlider) { draggingSlider = false; LivingInvClient.saveConfig(); return true; }
+        return super.mouseReleased(mx, my, button);
+    }
+
+    @Override
     public boolean mouseScrolled(double mx, double my, double horizontal, double vertical) {
+        if (overSlider(mx, my)) {
+            Config cfg = LivingInvClient.config;
+            cfg.overlayOpacity = Math.max(0, Math.min(100, cfg.overlayOpacity + (int) Math.signum(vertical) * 5));
+            LivingInvClient.saveConfig();
+            return true;
+        }
         if (mx >= listX && mx < listX + listW + 6 && my >= listY && my < listY + listH) {
             scroll -= vertical * ROW;
             clampScroll();
@@ -213,6 +241,7 @@ public class PickerScreen extends Screen {
             if (p.id != null) client.getTextureManager().destroyTexture(p.id);
         }
         previews.clear();
+        LivingInvClient.saveConfig();
         super.removed();
     }
 
@@ -293,10 +322,13 @@ public class PickerScreen extends Screen {
 
     private void drawRightPane(DrawContext ctx, int mx, int my) {
         if (tab == 0) drawAnimationInfo(ctx); else drawOverlayPreview(ctx, mx, my);
-        Text hint = Text.translatable(tab == 0 ? "livinginv.drop.anim" : "livinginv.drop.overlay");
-        List<OrderedText> lines = textRenderer.wrapLines(hint, rightW);
-        int y = listY + listH - lines.size() * 10;
-        for (OrderedText l : lines) { ctx.drawTextWithShadow(textRenderer, l, rightX, y, DIM); y += 10; }
+        if (tab == 0) {
+            List<OrderedText> lines = textRenderer.wrapLines(Text.translatable("livinginv.drop.anim"), rightW);
+            int y = listY + listH - lines.size() * 10;
+            for (OrderedText l : lines) { ctx.drawTextWithShadow(textRenderer, l, rightX, y, DIM); y += 10; }
+        } else {
+            drawSlider(ctx, mx, my);
+        }
     }
 
     private void drawAnimationInfo(DrawContext ctx) {
@@ -359,7 +391,7 @@ public class PickerScreen extends Screen {
         if (it == null) for (Item i : items) if (i.selected) { it = i; break; }
         if (it == null) it = items.get(0);
 
-        int availH = listH - 14 - 24;
+        int availH = sliderY() - 20 - (listY + 2);
         float s = Math.min(rightW / (float) PanelComposer.PANEL_W, availH / (float) PanelComposer.PANEL_H);
         int dw = (int) (PanelComposer.PANEL_W * s), dh = (int) (PanelComposer.PANEL_H * s);
         int ox = rightX + (rightW - dw) / 2, oy = listY + 2;
@@ -374,11 +406,28 @@ public class PickerScreen extends Screen {
         if (p.id != null && !p.failed) {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
+            RenderSystem.setShaderColor(1f, 1f, 1f, LivingInvClient.config.overlayOpacity / 100f);
             ctx.drawTexture(p.id, ox, oy, dw, dh, 0f, 0f, p.regionW, p.regionH, p.texW, p.texH);
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
             RenderSystem.disableBlend();
         }
         ctx.drawBorder(ox - 1, oy - 1, dw + 2, dh + 2, BORDER);
         String cap = textRenderer.trimToWidth(it.label, rightW);
         ctx.drawTextWithShadow(textRenderer, cap, rightX + (rightW - textRenderer.getWidth(cap)) / 2, oy + dh + 6, it.selected ? ACCENT : TEXT);
+    }
+
+    private void drawSlider(DrawContext ctx, int mx, int my) {
+        int op = LivingInvClient.config.overlayOpacity;
+        int sy = sliderY();
+        ctx.drawTextWithShadow(textRenderer, Text.translatable("livinginv.opacity"), rightX, sy, DIM);
+        String val = op + "%";
+        ctx.drawTextWithShadow(textRenderer, val, rightX + rightW - textRenderer.getWidth(val), sy, TEXT);
+        int ty = sy + 13;
+        ctx.fill(rightX, ty, rightX + rightW, ty + 6, BORDER);
+        ctx.fill(rightX + 1, ty + 1, rightX + rightW - 1, ty + 5, 0xFF0E131A);
+        ctx.fill(rightX + 1, ty + 1, rightX + 1 + (rightW - 2) * op / 100, ty + 5, ACCENT);
+        int thumbX = rightX + (rightW - 6) * op / 100;
+        boolean hot = draggingSlider || overSlider(mx, my);
+        ctx.fill(thumbX, ty - 3, thumbX + 6, ty + 9, hot ? 0xFFFFFFFF : 0xFFC9D6E0);
     }
 }

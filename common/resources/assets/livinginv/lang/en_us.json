@@ -19,5 +19,6 @@
   "livinginv.tip.overlay": "An overlay is drawn over the animation. Transparent areas show the GIF.",
   "livinginv.source.builtin": "Built-in",
   "livinginv.source.user": "Your file",
-  "livinginv.default": "Default"
+  "livinginv.default": "Default",
+  "livinginv.opacity": "Overlay opacity"
 }

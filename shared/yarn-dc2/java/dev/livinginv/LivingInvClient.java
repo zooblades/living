@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 import java.io.IOException;
@@ -29,8 +28,8 @@ public class LivingInvClient implements ClientModInitializer {
         ScreenEvents.AFTER_INIT.register((client, screen, w, h) -> {
             if (screen instanceof InventoryScreen) {
                 PanelCore.invalidateOverlay();
-                Screens.getButtons(screen).add(ButtonWidget.builder(Text.literal("GIF"),
-                        b -> client.setScreen(new PickerScreen(screen))).dimensions(4, 4, 28, 16).build());
+                Screens.getButtons(screen).add(new FlatButton(4, 4, 28, 16, Text.literal("GIF"),
+                        b -> client.setScreen(new PickerScreen(screen)), true));
             }
         });
     }
