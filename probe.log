@@ -1,0 +1,122 @@
+MC_JAR=/home/runner/.gradle/caches/fabric-loom/minecraftMaven/net/minecraft/minecraft-merged/1.21.11-net.fabricmc.yarn.1_21_11.1.21.11+build.6-v2/minecraft-merged-1.21.11-net.fabricmc.yarn.1_21_11.1.21.11+build.6-v2.jar
+== Screen
+  protected final net.minecraft.client.MinecraftClient client;
+  public int width;
+  public int height;
+  protected final net.minecraft.client.font.TextRenderer textRenderer;
+  public final void renderWithTooltip(net.minecraft.client.gui.DrawContext, int, int, float);
+  public void render(net.minecraft.client.gui.DrawContext, int, int, float);
+  public boolean keyPressed(net.minecraft.client.input.KeyInput);
+  public void close();
+  public final void init(int, int);
+  protected void clearAndInit();
+  protected void init();
+  public void removed();
+  public void renderBackground(net.minecraft.client.gui.DrawContext, int, int, float);
+  protected void renderPanoramaBackground(net.minecraft.client.gui.DrawContext, float);
+  protected void renderDarkening(net.minecraft.client.gui.DrawContext);
+  protected void renderDarkening(net.minecraft.client.gui.DrawContext, int, int, int, int);
+  public static void renderBackgroundTexture(net.minecraft.client.gui.DrawContext, net.minecraft.util.Identifier, int, int, float, float, int, int);
+  public void renderInGameBackground(net.minecraft.client.gui.DrawContext);
+  public void onFilesDropped(java.util.List<java.nio.file.Path>);
+== input classes
+net/minecraft/client/input/Scroller.class
+net/minecraft/client/input/CursorMovement.class
+net/minecraft/client/input/CharInput.class
+net/minecraft/client/input/SystemKeycodes.class
+net/minecraft/client/input/AbstractInput.class
+net/minecraft/client/input/KeyInput.class
+net/minecraft/client/input/MouseInput.class
+net/minecraft/client/input/KeyboardInput.class
+net/minecraft/client/input/Input.class
+net/minecraft/client/gui/Click.class
+-- net.minecraft.client.gui.Click
+Compiled from "Click.java"
+public final class net.minecraft.client.gui.Click extends java.lang.Record implements net.minecraft.client.input.AbstractInput {
+  private final double x;
+  private final double y;
+  private final net.minecraft.client.input.MouseInput buttonInfo;
+  public net.minecraft.client.gui.Click(double, double, net.minecraft.client.input.MouseInput);
+  public int getKeycode();
+  public int button();
+  public int modifiers();
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public double x();
+  public double y();
+  public net.minecraft.client.input.MouseInput buttonInfo();
+}
+-- net.minecraft.client.input.KeyInput
+Compiled from "KeyInput.java"
+public final class net.minecraft.client.input.KeyInput extends java.lang.Record implements net.minecraft.client.input.AbstractInput {
+  private final int key;
+  private final int scancode;
+  private final int modifiers;
+  public net.minecraft.client.input.KeyInput(int, int, int);
+  public int getKeycode();
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public int key();
+  public int scancode();
+  public int modifiers();
+}
+-- net.minecraft.client.input.CharInput
+Compiled from "CharInput.java"
+public final class net.minecraft.client.input.CharInput extends java.lang.Record {
+  private final int codepoint;
+  private final int modifiers;
+  public net.minecraft.client.input.CharInput(int, int);
+  public java.lang.String asString();
+  public boolean isValidChar();
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public int codepoint();
+  public int modifiers();
+}
+-- net.minecraft.client.input.MouseInput
+Compiled from "MouseInput.java"
+public final class net.minecraft.client.input.MouseInput extends java.lang.Record implements net.minecraft.client.input.AbstractInput {
+  private final int button;
+  private final int modifiers;
+  public net.minecraft.client.input.MouseInput(int, int);
+  public int getKeycode();
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public int button();
+  public int modifiers();
+}
+== DrawContext
+  public void fill(int, int, int, int, int);
+  public void drawTextWithShadow(net.minecraft.client.font.TextRenderer, java.lang.String, int, int, int);
+  public void drawTexture(com.mojang.blaze3d.pipeline.RenderPipeline, net.minecraft.util.Identifier, int, int, float, float, int, int, int, int, int);
+  public void drawTexture(com.mojang.blaze3d.pipeline.RenderPipeline, net.minecraft.util.Identifier, int, int, float, float, int, int, int, int);
+  public void drawTexture(com.mojang.blaze3d.pipeline.RenderPipeline, net.minecraft.util.Identifier, int, int, float, float, int, int, int, int, int, int);
+  public void drawTexture(com.mojang.blaze3d.pipeline.RenderPipeline, net.minecraft.util.Identifier, int, int, float, float, int, int, int, int, int, int, int);
+== kb
+  private final net.minecraft.client.util.Clipboard clipboard;
+  public java.lang.String getClipboard();
+  public void setClipboard(java.lang.String);
+  public final net.minecraft.client.Keyboard keyboard;
+== Pressable/Clickable
+  public net.minecraft.client.gui.widget.PressableWidget(int, int, int, int, net.minecraft.text.Text);
+  protected final void renderWidget(net.minecraft.client.gui.DrawContext, int, int, float);
+  protected static final net.minecraft.client.gui.widget.ButtonWidget$NarrationSupplier DEFAULT_NARRATION_SUPPLIER;
+  protected net.minecraft.client.gui.widget.ButtonWidget(int, int, int, int, net.minecraft.text.Text, net.minecraft.client.gui.widget.ButtonWidget$PressAction, net.minecraft.client.gui.widget.ButtonWidget$NarrationSupplier);
+  public boolean active;
+  public final void render(net.minecraft.client.gui.DrawContext, int, int, float);
+  protected abstract void renderWidget(net.minecraft.client.gui.DrawContext, int, int, float);
+  public boolean isFocused();
+  public boolean isHovered();
+  public int getX();
+== ResourceManager
+  public abstract java.util.Map<net.minecraft.util.Identifier, net.minecraft.resource.Resource> findResources(java.lang.String, java.util.function.Predicate<net.minecraft.util.Identifier>);
+== Resource
+  public java.io.InputStream getInputStream() throws java.io.IOException;
+== TextRenderer
+  public int getWidth(java.lang.String);
+== Window
+  public int getScaleFactor();
