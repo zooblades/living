@@ -1,106 +1,86 @@
 package dev.livinginv;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.Locale;
 
+/** The mod menu screen: a thin shell, all logic lives in PickerUi. */
 public class PickerScreen extends Screen {
-    private static final int PER_PAGE = 6;
     private final Screen parent;
-    private List<Path> files = List.of();
-    private int page;
+    private final PickerPlatform platform = new PickerPlatform(this);
+    private final PickerUi ui = new PickerUi(platform);
 
     public PickerScreen(Screen parent) {
         super(Component.translatable("livinginv.title"));
         this.parent = parent;
     }
 
-    static boolean supported(Path p) {
-        String n = p.getFileName().toString().toLowerCase(Locale.ROOT);
-        return n.endsWith(".gif") || n.endsWith(".png") || n.endsWith(".jpg") || n.endsWith(".jpeg") || n.endsWith(".bmp");
-    }
-
-    private void scan() {
-        try (var s = Files.list(LivingInvClient.dir)) {
-            files = s.filter(Files::isRegularFile).filter(PickerScreen::supported).sorted().toList();
-        } catch (IOException e) {
-            files = List.of();
-        }
-    }
-
     @Override
     protected void init() {
-        scan();
-        Config cfg = LivingInvClient.config;
-        int w = 220, x = width / 2 - w / 2, y = 34;
-        int pages = Math.max(1, (files.size() + PER_PAGE - 1) / PER_PAGE);
-        page = Math.max(0, Math.min(page, pages - 1));
-
-        for (int i = 0; i < PER_PAGE; i++) {
-            int idx = page * PER_PAGE + i;
-            if (idx >= files.size()) break;
-            String name = files.get(idx).getFileName().toString();
-            String label = (name.equals(cfg.selected) ? "\u2714 " : "") + (name.length() > 30 ? name.substring(0, 27) + "..." : name);
-            addRenderableWidget(Button.builder(Component.literal(label), b -> {
-                cfg.selected = name;
-                LivingInvClient.saveConfig();
-                PanelCore.reload();
-                rebuildWidgets();
-            }).bounds(x, y + i * 24, w, 20).build());
-        }
-
-        int ry = y + PER_PAGE * 24 + 4;
-        addRenderableWidget(Button.builder(Component.literal("<"), b -> { page--; rebuildWidgets(); })
-                .bounds(x, ry, 20, 20).build()).active = page > 0;
-        addRenderableWidget(Button.builder(Component.literal(">"), b -> { page++; rebuildWidgets(); })
-                .bounds(x + w - 20, ry, 20, 20).build()).active = page < pages - 1;
-
-        ry += 24;
-        addRenderableWidget(Button.builder(Component.translatable("livinginv.off"), b -> {
-            cfg.selected = "";
-            LivingInvClient.saveConfig();
-            PanelCore.reload();
-            rebuildWidgets();
-        }).bounds(x, ry, w / 2 - 2, 20).build());
-        addRenderableWidget(Button.builder(Component.translatable("livinginv.folder"),
-                b -> FolderOpener.open(LivingInvClient.dir)).bounds(x + w / 2 + 2, ry, w / 2 - 2, 20).build());
-
-        ry += 24;
-        addRenderableWidget(Button.builder(Component.translatable("livinginv.done"), b -> onClose())
-                .bounds(x, ry, w, 20).build());
+        ui.init(width, height);
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
-        super.extractRenderState(g, mouseX, mouseY, delta);
-        g.centeredText(font, title, width / 2, 14, 0xFFFFFFFF);
-        g.centeredText(font, Component.translatable("livinginv.drop"), width / 2, height - 22, 0xFFAAAAAA);
-        String st = PanelCore.status;
-        if (PanelCore.progress >= 0) st = "Loading " + PanelCore.progress + "%";
-        if (!st.isEmpty()) g.centeredText(font, st, width / 2, height - 10, 0xFFFFDD55);
+    public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+        extractBackground(g, mx, my, delta);
+        platform.begin(g);
+        ui.render(mx, my);
+    }
+
+    @Override
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        return ui.mouseClicked(event.x(), event.y(), event.button()) || super.mouseClicked(event, doubleClick);
+    }
+
+    @Override
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        return ui.mouseDragged(event.x(), event.y()) || super.mouseDragged(event, dx, dy);
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent event) {
+        return ui.mouseReleased() || super.mouseReleased(event);
+    }
+
+    @Override
+    public boolean mouseScrolled(double x, double y, double horizontal, double vertical) {
+        return ui.mouseScrolled(x, y, vertical) || super.mouseScrolled(x, y, horizontal, vertical);
+    }
+
+    @Override
+    public boolean charTyped(CharacterEvent event) {
+        return ui.charTyped(event.codepoint()) || super.charTyped(event);
+    }
+
+    @Override
+    public boolean keyPressed(KeyEvent event) {
+        return ui.keyPressed(event.key(), event.modifiers()) || super.keyPressed(event);
     }
 
     @Override
     public void onFilesDrop(List<Path> paths) {
-        for (Path p : paths) {
-            if (!supported(p)) continue;
-            try {
-                Files.copy(p, LivingInvClient.dir.resolve(p.getFileName().toString()), StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException ignored) { }
-        }
-        rebuildWidgets();
+        ui.filesDropped(paths);
+    }
+
+    @Override
+    public void removed() {
+        ui.removed();
+        super.removed();
     }
 
     @Override
     public void onClose() {
         minecraft.setScreenAndShow(parent);
     }
+
+    /** Test hooks. */
+    public void debugTab(int t) { ui.debugTab(t); }
+
+    public void debugSelect(int index) { ui.debugSelect(index); }
 }

@@ -5,20 +5,17 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 
 import java.io.InputStream;
-import java.util.Optional;
 
 /**
  * Draws the inventory panel: the animation underneath, the semi-transparent overlay
- * (assets/livinginv/textures/gui/inventory_overlay.png, replaceable by resource packs) on top.
+ * (chosen in the menu, see Overlays) on top.
  * All version-independent logic lives in PanelCore.
  */
 public final class Background {
     private static final Identifier TEX_ID = Identifier.tryParse("livinginv:background");
-    private static final Identifier OVERLAY = Identifier.tryParse("livinginv:textures/gui/inventory_overlay.png");
     private static NativeImageBackedTexture texture;
 
     private Background() { }
@@ -31,10 +28,7 @@ public final class Background {
     }
 
     private static PanelCore.Overlay loadOverlay() throws Exception {
-        MinecraftClient mc = MinecraftClient.getInstance();
-        Optional<Resource> res = mc.getResourceManager().getResource(OVERLAY);
-        if (!res.isPresent()) throw new IllegalStateException("overlay texture missing");
-        try (InputStream in = res.get().getInputStream(); NativeImage img = NativeImage.read(in)) {
+        try (InputStream in = Overlays.openWithFallback(LivingInvClient.config.overlay); NativeImage img = NativeImage.read(in)) {
             int k = Math.max(1, img.getWidth() / 256); // overlay is authored at 256*k px
             int w = PanelComposer.PANEL_W * k, h = PanelComposer.PANEL_H * k;
             int[] px = new int[w * h];

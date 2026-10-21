@@ -32,10 +32,7 @@ public final class Background {
     }
 
     private static PanelCore.Overlay loadOverlay() throws Exception {
-        MinecraftClient mc = MinecraftClient.getInstance();
-        Optional<Resource> res = mc.getResourceManager().getResource(OVERLAY);
-        if (!res.isPresent()) throw new IllegalStateException("overlay texture missing");
-        try (InputStream in = res.get().getInputStream(); NativeImage img = NativeImage.read(in)) {
+        try (InputStream in = Overlays.openWithFallback(LivingInvClient.config.overlay); NativeImage img = NativeImage.read(in)) {
             int k = Math.max(1, img.getWidth() / 256); // overlay is authored at 256*k px
             int w = PanelComposer.PANEL_W * k, h = PanelComposer.PANEL_H * k;
             int[] px = new int[w * h];
