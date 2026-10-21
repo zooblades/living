@@ -117,16 +117,32 @@ public class Driver implements ClientModInitializer {
             case 7:
                 if (inPhase() == 15) {
                     shot(mc, "5-menu-overlay-selected");
-                    mc.setScreen(new InventoryScreen(mc.player));
+                    LivingInvClient.config.overlayOpacity = 55;
+                    ((PickerScreen) mc.currentScreen).debugTab(0);
+                    ((PickerScreen) mc.currentScreen).debugRename(0, "Sunset glow");
                     go(8);
                 }
                 break;
             case 8:
+                if (inPhase() == 10) {
+                    shot(mc, "6-rename-dialog");
+                    mc.currentScreen.keyPressed(257, 0, 0); // Enter confirms
+                    go(9);
+                }
+                break;
+            case 9:
+                if (inPhase() == 10) {
+                    shot(mc, "7-menu-renamed");
+                    mc.setScreen(new InventoryScreen(mc.player));
+                    go(10);
+                }
+                break;
+            case 10:
                 if (inPhase() == 60) {
-                    shot(mc, "6-inventory-switched-overlay");
+                    shot(mc, "8-inventory-opacity-55");
                     System.out.println("[e2e] DONE");
                     mc.scheduleStop();
-                    go(9);
+                    go(11);
                 }
                 break;
             default:
