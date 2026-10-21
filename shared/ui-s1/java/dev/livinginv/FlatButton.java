@@ -15,8 +15,12 @@ public class FlatButton extends ButtonWidget {
         this.primary = primary;
     }
 
-    @Override
-    public void renderWidget(DrawContext ctx, int mouseX, int mouseY, float delta) {
+    // The game calls renderButton (<= 1.20.2) or renderWidget (>= 1.20.3); the other one is just a spare method.
+    public void renderButton(DrawContext ctx, int mouseX, int mouseY, float delta) { paint(ctx); }
+
+    public void renderWidget(DrawContext ctx, int mouseX, int mouseY, float delta) { paint(ctx); }
+
+    private void paint(DrawContext ctx) {
         boolean hot = active && (isHovered() || isFocused());
         int bg, border, text;
         if (!active) {
