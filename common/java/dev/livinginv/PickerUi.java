@@ -350,6 +350,14 @@ public final class PickerUi {
     /** Test hooks. */
     public void debugTab(int t) { switchTab(t); }
 
+    public void debugRename(int index, String text) {
+        if (index < 0 || index >= items.size()) return;
+        openRename(items.get(index).id);
+        renameText.setLength(0);
+        renameText.append(text);
+        caret = renameText.length();
+    }
+
     public void debugSelect(int index) { if (index >= 0 && index < items.size()) select(items.get(index)); }
 
     // ---------------------------------------------------------------- drawing helpers
