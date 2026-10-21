@@ -20,9 +20,10 @@ public class LivingInvClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         dir = FabricLoader.getInstance().getConfigDir().resolve("livinginv");
-        try { Files.createDirectories(dir); } catch (IOException ignored) { }
+        try { Files.createDirectories(dir); Files.createDirectories(dir.resolve("overlays")); } catch (IOException ignored) { }
         configFile = dir.resolve("config.json");
         config = Config.load(configFile);
+        Overlays.source = new ResourceSourceImpl();
         PanelCore.reload();
 
         // Small "GIF" button in the corner of the survival inventory

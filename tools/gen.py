@@ -83,17 +83,17 @@ GROUPS = [
          [("1.20", "1.20+build.1", "0.83.0+1.20")],
          src=["shared/res-yarn", "shared/ui-s0", "eras/dc"]),
     yarn("1.19.4", "1.19.4", "1.19.4+build.2", "0.87.2+1.19.4", 17, ">=1.19.4 <=1.19.4", None, [],
-         src=["shared/legacy", "eras/old-d"]),
+         src=["shared/legacy", "eras/old-d", "shared/res-yarn"]),
     yarn("1.19.3", "1.19.3", "1.19.3+build.5", "0.76.1+1.19.3", 17, ">=1.19.3 <=1.19.3", None, [],
-         src=["shared/legacy", "shared/legacy-inst", "eras/old-c"]),
+         src=["shared/legacy", "shared/legacy-inst", "eras/old-c", "shared/res-yarn"]),
     yarn("1.19-1.19.2", "1.19.2", "1.19.2+build.28", "0.77.0+1.19.2", 17, ">=1.19 <=1.19.2", None,
          [("1.19", "1.19+build.4", "0.58.0+1.19"), ("1.19.1", "1.19.1+build.6", "0.58.5+1.19.1")],
-         src=["shared/legacy", "shared/legacy-inst", "eras/old-b"]),
+         src=["shared/legacy", "shared/legacy-inst", "eras/old-b", "shared/res-yarn"]),
     yarn("1.17-1.18.2", "1.18.2", "1.18.2+build.4", "0.77.0+1.18.2", 16, ">=1.17 <=1.18.2", None,
          [("1.17.1", "1.17.1+build.65", "0.46.1+1.17"), ("1.18.1", "1.18.1+build.22", "0.46.6+1.18")],
-         src=["shared/legacy", "shared/legacy-inst", "eras/old-a"]),
+         src=["shared/legacy", "shared/legacy-inst", "eras/old-a", "shared/res-yarn-old"]),
     yarn("1.16.5", "1.16.5", "1.16.5+build.10", "0.42.0+1.16", 8, ">=1.16.5 <=1.16.5", None, [],
-         loader="0.14.25", src=["eras/old-e"]),
+         loader="0.14.25", src=["eras/old-e", "shared/res-yarn-old"]),
 ]
 
 def main(root):

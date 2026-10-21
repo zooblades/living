@@ -31,7 +31,7 @@ public final class Background {
 
     private static PanelCore.Overlay loadOverlay() throws Exception {
         MinecraftClient mc = MinecraftClient.getInstance();
-        try (InputStream in = Compat.openResource(mc, OVERLAY); NativeImage img = NativeImage.read(in)) {
+        try (InputStream in = Overlays.openWithFallback(LivingInvClient.config.overlay); NativeImage img = NativeImage.read(in)) {
             int k = Math.max(1, img.getWidth() / 256); // overlay is authored at 256*k px
             int w = PanelComposer.PANEL_W * k, h = PanelComposer.PANEL_H * k;
             int[] px = new int[w * h];
