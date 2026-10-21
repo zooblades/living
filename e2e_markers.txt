@@ -1,0 +1,20 @@
+[18:23:49] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 0 -> 1 at tick 61
+[18:24:02] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 1 -> 2 at tick 102
+[18:24:13] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 2 -> 3 at tick 303
+[18:24:14] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] screenshot 1-vanilla
+[18:24:15] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 3 -> 4 at tick 333
+[18:24:21] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] screenshot 2-modded
+[18:24:21] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 4 -> 5 at tick 453
+[18:24:22] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] screenshot 3-menu-animations
+[18:24:22] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 5 -> 6 at tick 468
+[18:24:23] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] screenshot 4-menu-overlays
+[18:24:23] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 6 -> 7 at tick 483
+[18:24:23] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] screenshot 5-menu-overlay-selected
+[18:24:23] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 7 -> 8 at tick 498
+[18:24:24] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] screenshot 6-rename-dialog
+[18:24:24] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 8 -> 9 at tick 508
+[18:24:24] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] screenshot 7-menu-renamed
+[18:24:24] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 9 -> 10 at tick 518
+[18:24:27] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] screenshot 8-inventory-opacity-55
+[18:24:27] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] DONE
+[18:24:27] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 10 -> 11 at tick 578
