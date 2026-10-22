@@ -28,7 +28,7 @@ public class PickerScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
-        extractBackground(g, mx, my, delta);
+        super.extractRenderState(g, mx, my, delta); // draws the (blurred) background the way this version expects
         platform.begin(g);
         ui.render(mx, my);
     }

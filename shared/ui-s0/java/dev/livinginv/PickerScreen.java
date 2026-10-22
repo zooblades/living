@@ -25,7 +25,7 @@ public class PickerScreen extends Screen {
 
     @Override
     public void render(DrawContext ctx, int mx, int my, float delta) {
-        renderBackground(ctx);
+        super.render(ctx, mx, my, delta); // draws the (blurred) background the way this version expects
         platform.begin(ctx);
         ui.render(mx, my);
     }
