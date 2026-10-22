@@ -568,7 +568,7 @@ public final class PickerUi {
     private void drawRenameDialog(int mx, int my) {
         p.fill(0, 0, width, height, 0x88000000);
         p.fill(mx0 - 1, my0 - 1, mx0 + mw + 1, my0 + mh + 1, BORDER);
-        p.fill(mx0, my0, mx0 + mw, my0 + mh, BG);
+        p.fill(mx0, my0, mx0 + mw, my0 + mh, 0xFF121820); // fully opaque, or the list text shows through
         gradient(mx0, my0, mx0 + mw, my0 + 30, HEAD_TOP, HEAD_BOTTOM);
         p.fill(mx0, my0 + 30, mx0 + mw, my0 + 31, BORDER);
         p.text(p.tr("livinginv.rename.title"), mx0 + 12, my0 + 11, ACCENT);
