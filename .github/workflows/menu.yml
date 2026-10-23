@@ -1,0 +1,69 @@
+name: menu-e2e
+on:
+  push:
+    branches: [menu]
+permissions:
+  contents: write
+jobs:
+  menu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: "menu-1218",   java: 21, gradle: "9.5.1", xvfb: "-screen 0 1280x720x24" }
+          - { name: "menu-yarn",   java: 21, gradle: "9.5.1", xvfb: "-screen 0 1280x720x24" }
+          - { name: "menu-mojmap", java: 25, gradle: "9.6.0", xvfb: "-screen 0 1280x720x24 +extension GLX +render -noreset" }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with: { distribution: temurin, java-version: "${{ matrix.java }}" }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: "${{ matrix.gradle }}" }
+      - name: Install virtual display, software OpenGL, xdotool
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb xdotool libgl1-mesa-dri libglx-mesa0 libgl1 libopenal1 mesa-utils
+      - name: Run the game and click it from outside
+        working-directory: tests/${{ matrix.name }}
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+          MESA_GL_VERSION_OVERRIDE: "4.5"
+          MESA_GLSL_VERSION_OVERRIDE: "450"
+          JAVA_TOOL_OPTIONS: "-Dlivinginv.debug=1"
+        run: |
+          mkdir -p run
+          printf 'onboardAccessibility:false\ntutorialStep:none\nskipMultiplayerWarning:true\njoinedFirstServer:true\npauseOnLostFocus:false\nguiScale:2\nenableVsync:false\nmaxFps:30\nnarrator:0\n' > run/options.txt
+          # real mouse / keyboard input, started once the first screenshot marker shows up
+          (
+            for i in $(seq 1 900); do grep -aq "screenshot a-before-clicks" ../../run.log 2>/dev/null && break; sleep 1; done
+            sleep 3
+            WID=$(xdotool search --onlyvisible --name Minecraft | head -1)
+            echo "WID=$WID" > ../../xdotool.log
+            xdotool getwindowgeometry $WID >> ../../xdotool.log 2>&1
+            click() { xdotool mousemove --window $WID $1 $2; sleep 0.4; xdotool click 1; echo "clicked $1 $2 at $(date +%T)" >> ../../xdotool.log; }
+            click 343 81      # "Overlays" tab
+            sleep 8
+            click 153 81      # back to "Animations"
+            sleep 3
+            click 381 129     # pencil of the first row -> rename dialog
+            sleep 9
+            xdotool key Escape; echo "pressed Escape at $(date +%T)" >> ../../xdotool.log
+            sleep 4
+            click 668 429     # "Done"
+          ) &
+          set +e
+          timeout 1200 xvfb-run -a --server-args="${{ matrix.xvfb }}" gradle runClient --no-daemon --stacktrace > ../../run.log 2>&1
+          echo "exit=$?" >> ../../run.log
+      - name: Collect
+        if: always()
+        run: |
+          mkdir -p out
+          cp run.log xdotool.log out/ 2>/dev/null || true
+          find tests/${{ matrix.name }} -type d -name e2e-shots -exec sh -c 'cp "$1"/*.png out/' _ {} \; || true
+          i=0; for f in $(ls -1tr tests/${{ matrix.name }}/run/screenshots/*.png 2>/dev/null); do i=$((i+1)); cp "$f" out/shot-0$i.png; done
+          grep -a 'e2e\]\|livinginv\]' run.log > out/markers.txt || true
+          grep -a -E "Failed to create backend|BackendCreation|GLX|Exception in|Crash|Can only|error:|cannot find symbol|symbol:|location:" -A2 run.log | head -60 | cut -c1-250 > out/summary.txt || true
+          cd out
+          git init -q -b o && git config user.name e2e && git config user.email e2e@users.noreply.github.com
+          git add -A && git commit -qm out
+          git push -f https://x-access-token:${{ github.token }}@github.com/${{ github.repository }} o:menu-out-${{ matrix.name }}
