@@ -32,7 +32,7 @@ public class Driver implements ClientModInitializer {
         });
         ClientTickEvents.END_CLIENT_TICK.register(this::onTick);
         Thread watchdog = new Thread(() -> {
-            try { Thread.sleep(240_000L); } catch (InterruptedException ignored) { }
+            try { Thread.sleep(150_000L); } catch (InterruptedException ignored) { }
             if (done) return;
             System.out.println("[e2e] HANG detected in phase " + phase + " (tick " + tick + ")");
             for (Map.Entry<Thread, StackTraceElement[]> e : Thread.getAllStackTraces().entrySet()) {
