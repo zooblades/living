@@ -1,0 +1,11 @@
+[22:36:54] [Render thread/ERROR] (Minecraft) Failed to create backend OpenGL
+
+com.mojang.renderpearl.api.device.BackendCreationException: Failed to create window for OpenGL context: Couldn't find matching GLX visual
+	at knot//com.mojang.renderpearl.backend.opengl.GlDevice.<init>(GlDevice.java:83)
+	at knot//com.mojang.renderpearl.backend.opengl.GlBackend.createDevice(GlBackend.java:68)
+--
+[22:36:54] [Render thread/ERROR] (Minecraft) Failed to create backend Vulkan
+
+com.mojang.renderpearl.api.device.BackendCreationException: Vulkan is not supported: Installed Vulkan doesn't implement the VK_KHR_surface extension
+	at knot//com.mojang.renderpearl.backend.vulkan.VulkanBackend.loadLibrary(VulkanBackend.java:69)
+	at knot//net.minecraft.client.Minecraft.<init>(Minecraft.java:530)
