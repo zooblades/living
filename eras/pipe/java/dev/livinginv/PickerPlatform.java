@@ -40,6 +40,8 @@ final class PickerPlatform implements PickerUi.Platform {
 
     @Override public String clipboard() { return mc().keyboard.getClipboard(); }
 
+    @Override public void newLayer() { ctx.createNewRootLayer(); }
+
     @Override public void close() { screen.close(); }
 
     @Override

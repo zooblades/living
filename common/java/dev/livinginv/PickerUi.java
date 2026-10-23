@@ -34,6 +34,9 @@ public final class PickerUi {
 
         String clipboard();
 
+        /** Everything drawn after this call must appear above everything drawn before it (text included). */
+        void newLayer();
+
         /** Leave the menu (return to the parent screen). */
         void close();
     }
@@ -440,7 +443,10 @@ public final class PickerUi {
         if (tab == 0) drawAnimationInfo(); else drawOverlayPane(hoverX, hoverY);
         for (Btn b : buttons) button(b, hoverX, hoverY);
 
-        if (renaming) drawRenameDialog(mx, my);
+        if (renaming) {
+            p.newLayer();
+            drawRenameDialog(mx, my);
+        }
     }
 
     private int hoveredIndex(int mx, int my) {

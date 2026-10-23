@@ -35,6 +35,9 @@ public class PickerScreen extends Screen {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (System.getProperty("livinginv.debug") != null) {
+            System.out.println("[livinginv] click x=" + event.x() + " y=" + event.y() + " button=" + event.button() + " mods=" + event.modifiers());
+        }
         return ui.mouseClicked(event.x(), event.y(), event.button()) || super.mouseClicked(event, doubleClick);
     }
 
@@ -60,6 +63,9 @@ public class PickerScreen extends Screen {
 
     @Override
     public boolean keyPressed(KeyEvent event) {
+        if (System.getProperty("livinginv.debug") != null) {
+            System.out.println("[livinginv] key key=" + event.key() + " mods=" + event.modifiers());
+        }
         return ui.keyPressed(event.key(), event.modifiers()) || super.keyPressed(event);
     }
 
