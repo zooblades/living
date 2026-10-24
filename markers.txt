@@ -1,0 +1,13 @@
+[10:15:22] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] menu opened
+[10:15:22] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 0 -> 1 at tick 101
+[10:15:23] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] screenshot a-before-clicks
+[10:15:23] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 1 -> 2 at tick 141
+[10:15:29] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] screenshot b-after-overlays-tab-click
+[10:15:29] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 2 -> 3 at tick 261
+[10:15:41] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] screenshot c-after-pencil-click
+[10:15:41] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 3 -> 4 at tick 501
+[10:15:49] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] menu closed by the Done click: false
+[10:15:49] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] screenshot d-after-done-click
+[10:15:49] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 4 -> 5 at tick 661
+[10:15:51] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] DONE
+[10:15:51] [Render thread/INFO] (Minecraft) [STDOUT]: [e2e] phase 5 -> 6 at tick 691
