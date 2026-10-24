@@ -1,5 +1,6 @@
 package dev.livinginv;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.CharacterEvent;
@@ -33,12 +34,29 @@ public class PickerScreen extends Screen {
         ui.render(mx, my);
     }
 
+    /** 26.3 numbers mouse buttons the SDL way (left = 1); the menu core wants left = 0. */
+    private static int primaryOrOther(int button) {
+        return button == InputConstants.MOUSE_BUTTON_LEFT ? 0 : 1;
+    }
+
+    /** 26.3 reports SDL scancodes for keys; translate the ones the rename dialog needs to the core's GLFW-style codes. */
+    private static int normalizeKey(int key) {
+        if (key == InputConstants.KEY_RETURN) return 257;
+        if (key == InputConstants.KEY_NUMPADENTER) return 335;
+        if (key == InputConstants.KEY_ESCAPE) return 256;
+        if (key == InputConstants.KEY_BACKSPACE) return 259;
+        if (key == InputConstants.KEY_DELETE) return 261;
+        if (key == InputConstants.KEY_LEFT) return 263;
+        if (key == InputConstants.KEY_RIGHT) return 262;
+        if (key == InputConstants.KEY_HOME) return 268;
+        if (key == InputConstants.KEY_END) return 269;
+        if (key == InputConstants.KEY_V) return 86;
+        return key;
+    }
+
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (System.getProperty("livinginv.debug") != null) {
-            System.out.println("[livinginv] click x=" + event.x() + " y=" + event.y() + " button=" + event.button() + " mods=" + event.modifiers());
-        }
-        return ui.mouseClicked(event.x(), event.y(), event.button()) || super.mouseClicked(event, doubleClick);
+        return ui.mouseClicked(event.x(), event.y(), primaryOrOther(event.button())) || super.mouseClicked(event, doubleClick);
     }
 
     @Override
@@ -63,10 +81,7 @@ public class PickerScreen extends Screen {
 
     @Override
     public boolean keyPressed(KeyEvent event) {
-        if (System.getProperty("livinginv.debug") != null) {
-            System.out.println("[livinginv] key key=" + event.key() + " mods=" + event.modifiers());
-        }
-        return ui.keyPressed(event.key(), event.modifiers()) || super.keyPressed(event);
+        return ui.keyPressed(normalizeKey(event.key()), event.modifiers()) || super.keyPressed(event);
     }
 
     @Override
@@ -89,4 +104,6 @@ public class PickerScreen extends Screen {
     public void debugTab(int t) { ui.debugTab(t); }
 
     public void debugSelect(int index) { ui.debugSelect(index); }
+
+    public void debugRename(int index, String text) { ui.debugRename(index, text); }
 }
