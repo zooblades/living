@@ -40,7 +40,11 @@ final class PickerPlatform implements PickerUi.Platform {
 
     @Override public String clipboard() { return mc().keyboard.getClipboard(); }
 
-    @Override public void newLayer() { ctx.draw(); }
+    @Override public void newLayer() {
+        ctx.draw(); // flush what has been drawn so far
+        // text is drawn slightly "in front" of flat shapes, so anything that must cover it has to be lifted in Z (vanilla does the same for tooltips)
+        ctx.getMatrices().translate(0f, 0f, 300f);
+    }
 
     @Override public void close() { screen.close(); }
 
