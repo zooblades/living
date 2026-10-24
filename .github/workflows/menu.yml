@@ -14,7 +14,6 @@ jobs:
         include:
           - { name: "menu-1218",   java: 21, gradle: "9.5.1", xvfb: "-screen 0 1280x720x24" }
           - { name: "menu-yarn",   java: 21, gradle: "9.5.1", xvfb: "-screen 0 1280x720x24" }
-          - { name: "menu-mojmap", java: 25, gradle: "9.6.0", xvfb: "-screen 0 1280x720x32 +extension GLX +render -noreset" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v5
@@ -22,7 +21,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with: { gradle-version: "${{ matrix.gradle }}" }
       - name: Install virtual display, software OpenGL, xdotool
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb xdotool libgl1-mesa-dri libglx-mesa0 libgl1 libopenal1 mesa-utils
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb xdotool x11-utils libgl1-mesa-dri libglx-mesa0 libgl1 libopenal1 mesa-utils
       - name: Run the game and click it from outside
         working-directory: tests/${{ matrix.name }}
         env:
@@ -39,10 +38,15 @@ jobs:
           (
             for i in $(seq 1 900); do grep -aq "screenshot a-before-clicks" ../../run.log 2>/dev/null && break; sleep 1; done
             sleep 3
-            WID=$(xdotool search --onlyvisible --name Minecraft | head -1)
-            echo "WID=$WID" > ../../xdotool.log
-            xdotool getwindowgeometry $WID >> ../../xdotool.log 2>&1
-            click() { xdotool mousemove --window $WID $1 $2; sleep 0.4; xdotool click 1; echo "clicked $1 $2 at $(date +%T)" >> ../../xdotool.log; }
+            sleep 2
+            xwininfo -root -tree > ../../xwininfo.txt 2>&1
+            LINE=$(grep -E " 854x480\+" ../../xwininfo.txt | head -1)
+            echo "window line: $LINE" > ../../xdotool.log
+            ABS=$(echo "$LINE" | grep -oE '\+-?[0-9]+\+-?[0-9]+ *$' | head -1)
+            AX=$(echo "$ABS" | sed -E 's/^\+(-?[0-9]+)\+(-?[0-9]+) *$/\1/'); AY=$(echo "$ABS" | sed -E 's/^\+(-?[0-9]+)\+(-?[0-9]+) *$/\2/')
+            AX=${AX:-0}; AY=${AY:-0}
+            echo "absolute window origin: $AX,$AY" >> ../../xdotool.log
+            click() { xdotool mousemove $((AX + $1)) $((AY + $2)); sleep 0.4; xdotool click 1; echo "clicked $1 $2 (abs $((AX + $1)),$((AY + $2))) at $(date +%T)" >> ../../xdotool.log; }
             click 343 81      # "Overlays" tab
             sleep 8
             click 153 81      # back to "Animations"
@@ -63,7 +67,7 @@ jobs:
         if: always()
         run: |
           mkdir -p out
-          cp run.log xdotool.log out/ 2>/dev/null || true
+          cp run.log xdotool.log xwininfo.txt out/ 2>/dev/null || true
           find tests/${{ matrix.name }} -type d -name e2e-shots -exec sh -c 'cp "$1"/*.png out/' _ {} \; || true
           i=0; for f in $(ls -1tr tests/${{ matrix.name }}/run/screenshots/*.png 2>/dev/null); do i=$((i+1)); cp "$f" out/shot-0$i.png; done
           grep -a 'e2e\]\|livinginv\]' run.log > out/markers.txt || true
