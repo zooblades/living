@@ -28,7 +28,7 @@ public class PickerScreen extends Screen {
 
     @Override
     public void render(DrawContext ctx, int mx, int my, float delta) {
-        renderBackground(ctx, mx, my, delta);
+        super.render(ctx, mx, my, delta); // draws the (blurred) background the way this version expects
         platform.begin(ctx);
         ui.render(mx, my);
     }
@@ -83,4 +83,6 @@ public class PickerScreen extends Screen {
     public void debugTab(int t) { ui.debugTab(t); }
 
     public void debugSelect(int index) { ui.debugSelect(index); }
+
+    public void debugRename(int index, String text) { ui.debugRename(index, text); }
 }

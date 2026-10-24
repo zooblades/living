@@ -40,6 +40,8 @@ final class PickerPlatform implements PickerUi.Platform {
 
     @Override public String clipboard() { return mc().keyboardHandler.getClipboard(); }
 
+    @Override public void newLayer() { g.nextStratum(); }
+
     @Override public void close() { screen.onClose(); }
 
     @Override

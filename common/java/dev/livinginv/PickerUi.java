@@ -34,6 +34,9 @@ public final class PickerUi {
 
         String clipboard();
 
+        /** Everything drawn after this call must appear above everything drawn before it (text included). */
+        void newLayer();
+
         /** Leave the menu (return to the parent screen). */
         void close();
     }
@@ -314,7 +317,7 @@ public final class PickerUi {
         if (key == KEY_RIGHT) { caret = Math.min(renameText.length(), caret + 1); return true; }
         if (key == KEY_HOME) { caret = 0; return true; }
         if (key == KEY_END) { caret = renameText.length(); return true; }
-        if (key == KEY_V && (modifiers & (2 | 8)) != 0) { // Ctrl+V / Cmd+V
+        if (key == KEY_V && (modifiers & (2 | 8 | 0xC0 | 0x300)) != 0) { // Ctrl+V / Cmd+V (GLFW or SDL modifier bits)
             String clip = p.clipboard();
             if (clip != null) {
                 for (int i = 0; i < clip.length() && renameText.length() < 40; i++) {
@@ -440,7 +443,10 @@ public final class PickerUi {
         if (tab == 0) drawAnimationInfo(); else drawOverlayPane(hoverX, hoverY);
         for (Btn b : buttons) button(b, hoverX, hoverY);
 
-        if (renaming) drawRenameDialog(mx, my);
+        if (renaming) {
+            p.newLayer();
+            drawRenameDialog(mx, my);
+        }
     }
 
     private int hoveredIndex(int mx, int my) {
@@ -568,7 +574,7 @@ public final class PickerUi {
     private void drawRenameDialog(int mx, int my) {
         p.fill(0, 0, width, height, 0x88000000);
         p.fill(mx0 - 1, my0 - 1, mx0 + mw + 1, my0 + mh + 1, BORDER);
-        p.fill(mx0, my0, mx0 + mw, my0 + mh, BG);
+        p.fill(mx0, my0, mx0 + mw, my0 + mh, 0xFF121820); // fully opaque, or the list text shows through
         gradient(mx0, my0, mx0 + mw, my0 + 30, HEAD_TOP, HEAD_BOTTOM);
         p.fill(mx0, my0 + 30, mx0 + mw, my0 + 31, BORDER);
         p.text(p.tr("livinginv.rename.title"), mx0 + 12, my0 + 11, ACCENT);
