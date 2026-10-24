@@ -1,0 +1,55 @@
+Compiled from "MouseButtonInfo.java"
+public final class net.minecraft.client.input.MouseButtonInfo extends java.lang.Record implements net.minecraft.client.input.InputWithModifiers {
+  private final int button;
+
+  private final int modifiers;
+
+  public net.minecraft.client.input.MouseButtonInfo(int, int);
+    Code:
+         0: aload_0
+         1: invokespecial #31                 // Method java/lang/Record."<init>":()V
+         4: aload_0
+         5: iload_1
+         6: putfield      #33                 // Field button:I
+         9: aload_0
+        10: iload_2
+        11: putfield      #35                 // Field modifiers:I
+        14: return
+
+  public int input();
+    Code:
+         0: aload_0
+         1: getfield      #33                 // Field button:I
+         4: ireturn
+
+  public final java.lang.String toString();
+    Code:
+         0: aload_0
+         1: invokedynamic #55,  0             // InvokeDynamic #0:toString:(Lnet/minecraft/client/input/MouseButtonInfo;)Ljava/lang/String;
+         6: areturn
+
+  public final int hashCode();
+    Code:
+         0: aload_0
+         1: invokedynamic #59,  0             // InvokeDynamic #0:hashCode:(Lnet/minecraft/client/input/MouseButtonInfo;)I
+         6: ireturn
+
+  public final boolean equals(java.lang.Object);
+    Code:
+         0: aload_0
+         1: aload_1
+         2: invokedynamic #65,  0             // InvokeDynamic #0:equals:(Lnet/minecraft/client/input/MouseButtonInfo;Ljava/lang/Object;)Z
+         7: ireturn
+
+  public int button();
+    Code:
+         0: aload_0
+         1: getfield      #33                 // Field button:I
+         4: ireturn
+
+  public int modifiers();
+    Code:
+         0: aload_0
+         1: getfield      #35                 // Field modifiers:I
+         4: ireturn
+}

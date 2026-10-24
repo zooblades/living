@@ -1,0 +1,77 @@
+jar=/home/runner/.gradle/caches/fabric-loom/26.3/minecraft-merged.jar
+== InputConstants
+  public static final int KEY_RETURN = 40;
+  public static final int KEY_ESCAPE = 41;
+  public static final int KEY_BACKSPACE = 42;
+  public static final int MOUSE_BUTTON_LEFT = 1;
+  public static final int MOUSE_BUTTON_MIDDLE = 2;
+  public static final int MOUSE_BUTTON_RIGHT = 3;
+  public static final int MOUSE_BUTTON_4 = 4;
+  public static final int MOUSE_BUTTON_5 = 5;
+  public static final int MOUSE_BUTTON_6 = 6;
+  public static final int MOUSE_BUTTON_7 = 7;
+  public static final int MOUSE_BUTTON_8 = 8;
+  public static void grabMouse(com.mojang.blaze3d.platform.Window, double, double);
+  public static void releaseMouse(com.mojang.blaze3d.platform.Window, double, double);
+== sdl/input classes
+com/mojang/blaze3d/platform/SDLEventHandler.class
+com/mojang/blaze3d/platform/SdlDebug.class
+net/minecraft/client/KeyboardHandler$1.class
+net/minecraft/client/MouseHandler$LastClick.class
+net/minecraft/client/KeyboardHandler.class
+net/minecraft/client/MouseHandler.class
+net/minecraft/client/input/MouseButtonInfo$Action.class
+net/minecraft/client/input/MouseButtonInfo$MouseButton.class
+net/minecraft/client/input/MouseButtonInfo.class
+net/minecraft/client/input/MouseButtonEvent.class
+== MouseHandler methods
+Compiled from "MouseHandler.java"
+public class net.minecraft.client.MouseHandler {
+  private static final org.slf4j.Logger LOGGER;
+  public static final long DOUBLE_CLICK_THRESHOLD_MS;
+  private final net.minecraft.client.Minecraft minecraft;
+  private boolean isLeftPressed;
+  private boolean isMiddlePressed;
+  private boolean isRightPressed;
+  private double xpos;
+  private double ypos;
+  private net.minecraft.client.MouseHandler$LastClick lastClick;
+  protected int lastClickButton;
+  private net.minecraft.client.input.MouseButtonInfo activeButton;
+  private boolean ignoreFirstMove;
+  private double mousePressedTime;
+  private final net.minecraft.util.SmoothDouble smoothTurnX;
+  private final net.minecraft.util.SmoothDouble smoothTurnY;
+  private double accumulatedDX;
+  private double accumulatedDY;
+  private final net.minecraft.client.ScrollWheelHandler scrollWheelHandler;
+  private double lastHandleMovementTime;
+  private boolean mouseGrabbed;
+  public net.minecraft.client.MouseHandler(net.minecraft.client.Minecraft);
+  public void onButton(long, net.minecraft.client.input.MouseButtonInfo, int);
+  public void fillMousePositionDetails(net.minecraft.CrashReportCategory, com.mojang.blaze3d.platform.Window);
+  public void onScroll(long, double, double);
+  public void onDrop(long, java.util.List<java.lang.String>);
+  public void onMove(long, double, double, double, double);
+  public void handleAccumulatedMovement();
+  public static double getScaledXPos(com.mojang.blaze3d.platform.Window, double);
+  public double getScaledXPos(com.mojang.blaze3d.platform.Window);
+  public static double getScaledYPos(com.mojang.blaze3d.platform.Window, double);
+  public double getScaledYPos(com.mojang.blaze3d.platform.Window);
+  private void turnPlayer(double);
+  public boolean isLeftPressed();
+  public boolean isMiddlePressed();
+  public boolean isRightPressed();
+  public double xpos();
+  public double ypos();
+  public void setIgnoreFirstMove();
+  public void resyncMousePosition();
+  public boolean isMouseGrabbed();
+  public void grabMouse();
+  public void releaseMouse();
+  public void cursorEntered();
+  public void drawDebugMouseInfo(net.minecraft.client.gui.Font, net.minecraft.client.gui.GuiGraphicsExtractor);
+  private static java.lang.String lambda$fillMousePositionDetails$1(com.mojang.blaze3d.platform.Window) throws java.lang.Exception;
+  private java.lang.String lambda$fillMousePositionDetails$0(com.mojang.blaze3d.platform.Window) throws java.lang.Exception;
+  static {};
+}
