@@ -80,4 +80,6 @@ public class PickerScreen extends Screen {
     public void debugTab(int t) { ui.debugTab(t); }
 
     public void debugSelect(int index) { ui.debugSelect(index); }
+
+    public void debugRename(int index, String text) { ui.debugRename(index, text); }
 }

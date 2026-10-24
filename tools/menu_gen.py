@@ -79,20 +79,10 @@ public class Driver implements ClientModInitializer {
                         go(1);
                     }
                     break;
-                case 1: if (t == 40) { shot(mc, "a-before-clicks"); go(2); } break;
-                case 2: if (t == 120) { shot(mc, "b-after-overlays-tab-click"); go(3); } break;
-                case 3: if (t == 240) { shot(mc, "c-after-pencil-click"); go(4); } break;
-                case 4:
-                    if (t == 160) {
-                        boolean closed = current == title;
-                        System.out.println("[e2e] menu closed by the Done click: " + closed);
-                        shot(mc, "d-after-done-click");
-                        go(5);
-                    }
-                    break;
-                case 5:
-                    if (t == 30) { System.out.println("[e2e] DONE"); done = true; @@STOP@@ go(6); }
-                    break;
+                case 1: if (t == 40) { shot(mc, "a-menu-animations"); picker.debugTab(1); go(2); } break;
+                case 2: if (t == 40) { shot(mc, "b-menu-overlays"); picker.debugTab(0); picker.debugRename(0, "Sunset glow"); go(3); } break;
+                case 3: if (t == 40) { shot(mc, "c-rename-dialog"); go(4); } break;
+                case 4: if (t == 30) { System.out.println("[e2e] DONE"); done = true; @@STOP@@ go(5); } break;
                 default:
             }
         } catch (Throwable ex) {
